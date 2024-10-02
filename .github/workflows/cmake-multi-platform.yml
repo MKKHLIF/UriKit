@@ -40,26 +40,25 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up vcpkg
+      if: runner.os == 'Linux'
       run: |
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          ./bootstrap-vcpkg.sh
-          ./vcpkg integrate install
-        else
-          git clone https://github.com/microsoft/vcpkg.git
-          .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg integrate install
-        fi
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
+        ./bootstrap-vcpkg.sh
+        ./vcpkg integrate install
+
+    - name: Set up vcpkg (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
+        .\bootstrap-vcpkg.bat
+        .\vcpkg integrate install
 
     - name: Install dependencies
       run: |
         cd vcpkg
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          ./vcpkg install
-        else
-          .\vcpkg\vcpkg install
-        fi
+        ./vcpkg install
 
     - name: Set reusable strings
       id: strings
