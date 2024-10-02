@@ -19,11 +19,17 @@ TEST(UriTests, ParseAuthorityWithFragment) {
 
 TEST(UriTests, ParseAuthorityOnly) {
     ASSERT_EQ(prism::Uri::parseAuthority("https://www.example.com:8080"), "www.example.com:8080");
+    ASSERT_EQ(prism::Uri::parseAuthority("https://www.example.com"), "www.example.com");
+
     ASSERT_EQ(prism::Uri::parseAuthority("https://user:password@www.example.com:8080"),
         "user:password@www.example.com:8080");
+    ASSERT_EQ(prism::Uri::parseAuthority("https://user:password@www.example.com"),
+        "user:password@www.example.com");
 }
 
 TEST(UriTests, ParseAuthorityWithUnusualCharacters) {
+    ASSERT_EQ(prism::Uri::parseAuthority("https://www.amazon.co.uk:80#?/"),
+        "www.amazon.co.uk:80");
     ASSERT_EQ(prism::Uri::parseAuthority("https://www.amazon.co.uk:80#?/"),
         "www.amazon.co.uk:80");
 }
