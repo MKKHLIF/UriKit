@@ -1,4 +1,4 @@
-﻿set(This uri)
+﻿set(This p_uri)
 
 file(GLOB_RECURSE SRC_FILES "*.cpp" "*.cc")
 file(GLOB_RECURSE HEADER_FILES "*.h" "*.hpp")
