@@ -7,6 +7,13 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ${This} PROPERTY CXX_STANDARD 20)
 endif()
 
+enable_testing()
+
 find_package(GTest CONFIG REQUIRED)
 target_link_libraries(${This} PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
 target_link_libraries(${This} PRIVATE p_uri)
+
+
+include(CTest)
+
+add_test(NAME ${This} COMMAND ${This})
