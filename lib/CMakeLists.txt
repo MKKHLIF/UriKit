@@ -10,4 +10,3 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 target_include_directories(${This} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-

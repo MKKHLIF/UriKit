@@ -11,8 +11,9 @@ message(STATUS "C++ Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
 project ("uri")
 
+enable_testing()
+
 add_subdirectory ("lib")
 add_subdirectory ("test")
 
-include(CTest)
-enable_testing()
+
