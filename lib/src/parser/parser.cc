@@ -1,6 +1,6 @@
-#include "parser_engine.h"
+#include "parser.h"
 
-std::optional<std::string> ParserEngine::parseScheme(const std::string& uri) {
+std::optional<std::string> Parser::parseScheme(const std::string& uri) {
     std::string scheme;
     const auto pos = uri.find(':');
     if (pos != std::string::npos) {
@@ -9,7 +9,7 @@ std::optional<std::string> ParserEngine::parseScheme(const std::string& uri) {
     return scheme;
 }
 
-std::optional<std::string> ParserEngine::parseAuthority(const std::string& uri) {
+std::optional<std::string> Parser::parseAuthority(const std::string& uri) {
     std::string authority;
     const auto pos = uri.find("://");
     if (pos == std::string::npos) return authority;
@@ -25,7 +25,7 @@ std::optional<std::string> ParserEngine::parseAuthority(const std::string& uri) 
     return authority;
 }
 
-std::optional<std::vector<std::string>> ParserEngine::parsePath(const std::string& uri) {
+std::optional<std::vector<std::string>> Parser::parsePath(const std::string& uri) {
     std::vector<std::string> path; // Vector to store the path segments
 
     // Find the position of "://", which indicates the end of the scheme
@@ -64,7 +64,7 @@ std::optional<std::vector<std::string>> ParserEngine::parsePath(const std::strin
     return path; // Return the vector of path segments
 }
 
-std::optional<std::string> ParserEngine::parseUserInfo(const std::string& authority) {
+std::optional<std::string> Parser::parseUserInfo(const std::string& authority) {
     // authority = [ userinfo "@" ] host [ ":" port ]
     // user:password@www.example.com:8080
     // www.example.com:8080
@@ -75,7 +75,7 @@ std::optional<std::string> ParserEngine::parseUserInfo(const std::string& author
     return userInfo;
 }
 
-std::optional<std::string> ParserEngine::parseHost(const std::string& authority) {
+std::optional<std::string> Parser::parseHost(const std::string& authority) {
     std::string host;
     const auto at_pos = authority.find('@');
     const auto colon_pos = authority.find_last_of(':');
@@ -91,7 +91,7 @@ std::optional<std::string> ParserEngine::parseHost(const std::string& authority)
     return authority.substr(hostStart, hostEnd - hostStart);
 }
 
-std::optional<std::string> ParserEngine::parsePort(const std::string& authority) {
+std::optional<std::string> Parser::parsePort(const std::string& authority) {
     // temp dummy default port
     std::string port = "80";
     const auto at_pos = authority.find('@');

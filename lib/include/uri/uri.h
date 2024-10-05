@@ -18,7 +18,7 @@ public:
 
 	~Uri();
 
-	bool parseString(const std::string& uri);
+	bool parse(const std::string& uri);
 
 	std::string getScheme() const;
 

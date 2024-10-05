@@ -30,7 +30,7 @@ Uri::Uri() : pimpl_(std::make_unique<Uri::UriImpl>()) {
 
 Uri::~Uri() = default;
 
-bool Uri::parseString(const std::string &uri) {
+bool Uri::parse(const std::string &uri) {
    // To-do: call parser helper and fill the impl. and set other properties accordingly.
 
     return true;

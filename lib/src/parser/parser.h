@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <uri/uri.h>
 
-class ParserEngine {
+class Parser {
 public:
 
-	// To-do: make these private, and instead make a piublic interface that parses and fills the URI object
 	static std::optional<std::string> parseScheme(const std::string& uri);
 
 	static std::optional<std::string> parseAuthority(const std::string& uri);
