@@ -1,7 +1,7 @@
 #include <string>
 #include <uri/uri.h>
 
-struct prism::Uri::UriImpl {
+struct Uri::UriImpl {
     std::string scheme;
     std::string host;
     std::vector<std::string> path;
@@ -11,12 +11,12 @@ struct prism::Uri::UriImpl {
     ~UriImpl() = default;
 };
 
-prism::Uri::Uri() : pimpl_(std::make_unique<UriImpl>()) {
+Uri::Uri() : pimpl_(std::make_unique<UriImpl>()) {
 }
 
-prism::Uri::~Uri() = default;
+Uri::~Uri() = default;
 
-bool prism::Uri::parseString(const std::string &uri) {
+bool Uri::parseString(const std::string &uri) {
     const std::string scheme = parseScheme(uri);
     if (scheme.empty()) {
         return false;
@@ -27,19 +27,19 @@ bool prism::Uri::parseString(const std::string &uri) {
     return true;
 }
 
-std::string prism::Uri::getScheme() const {
+std::string Uri::getScheme() const {
     return this->pimpl_->scheme;
 }
 
-std::string prism::Uri::getHost() const {
+std::string Uri::getHost() const {
     return this->pimpl_->host;
 }
 
-std::vector<std::string> prism::Uri::getPath() const {
+std::vector<std::string> Uri::getPath() const {
     return this->pimpl_->path;
 }
 
-std::string prism::Uri::parseScheme(const std::string &uri) {
+std::string Uri::parseScheme(const std::string &uri) {
     std::string scheme;
     const auto pos = uri.find(':');
     if (pos != std::string::npos) {
@@ -49,7 +49,7 @@ std::string prism::Uri::parseScheme(const std::string &uri) {
 }
 
 
-std::string prism::Uri::parseAuthority(const std::string &uri) {
+std::string Uri::parseAuthority(const std::string &uri) {
     std::string authority;
     const auto pos = uri.find("://");
     if (pos == std::string::npos) return authority;
@@ -64,7 +64,7 @@ std::string prism::Uri::parseAuthority(const std::string &uri) {
     return authority;
 }
 
-std::vector<std::string> prism::Uri::parsePath(const std::string &uri) {
+std::vector<std::string> Uri::parsePath(const std::string &uri) {
     std::vector<std::string> path; // Vector to store the path segments
 
     // Find the position of "://", which indicates the end of the scheme
@@ -104,7 +104,7 @@ std::vector<std::string> prism::Uri::parsePath(const std::string &uri) {
 }
 
 
-std::string prism::Uri::parseUserInfo(const std::string &authority) {
+std::string Uri::parseUserInfo(const std::string &authority) {
     // authority = [ userinfo "@" ] host [ ":" port ]
     // user:password@www.example.com:8080
     // www.example.com:8080
@@ -116,7 +116,7 @@ std::string prism::Uri::parseUserInfo(const std::string &authority) {
 }
 
 
-std::string prism::Uri::parseHost(const std::string &authority) {
+std::string Uri::parseHost(const std::string &authority) {
     std::string host;
     const auto at_pos = authority.find('@');
     const auto colon_pos = authority.find_last_of(':');
@@ -132,7 +132,7 @@ std::string prism::Uri::parseHost(const std::string &authority) {
     return authority.substr(hostStart, hostEnd - hostStart);
 }
 
-std::string prism::Uri::parsePort(const std::string &authority) {
+std::string Uri::parsePort(const std::string &authority) {
     // temp dummy default port
     std::string port = "80";
     const auto at_pos = authority.find('@');
