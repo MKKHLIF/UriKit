@@ -6,6 +6,8 @@
 
 class ParserEngine {
 public:
+
+	// To-do: make these private, and instead make a piublic interface that parses and fills the URI object
 	static std::optional<std::string> parseScheme(const std::string& uri);
 
 	static std::optional<std::string> parseAuthority(const std::string& uri);

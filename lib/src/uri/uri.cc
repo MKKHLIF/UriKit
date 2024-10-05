@@ -1,16 +1,6 @@
 #include <string>
 #include <uri/uri.h>
 
-struct Uri::UriImpl {
-    std::string scheme;
-    std::string host;
-    std::vector<std::string> path;
-
-    UriImpl() = default;
-
-    ~UriImpl() = default;
-};
-
 Uri::Uri() : pimpl_(std::make_unique<UriImpl>()) {
 }
 

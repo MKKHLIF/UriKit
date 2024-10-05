@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 
-
 class Uri {
 public:
 	Uri();
@@ -28,8 +27,8 @@ public:
 	std::vector<std::string> getPath() const;
 
 private:
-	struct UriImpl;
+	class Impl;
 
 	// exclusively owns the pimpl object it points to.
-	std::unique_ptr<struct UriImpl> pimpl_;
+	std::unique_ptr<Impl> pimpl_;
 };
