@@ -27,8 +27,7 @@ public:
 	std::vector<std::string> getPath() const;
 
 private:
-	class Impl;
-
+	struct UriImpl;
 	// exclusively owns the pimpl object it points to.
-	std::unique_ptr<Impl> pimpl_;
+	std::unique_ptr<UriImpl> pimpl_;
 };
