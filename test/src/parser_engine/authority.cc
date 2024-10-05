@@ -30,7 +30,7 @@ TEST(ParserEngineTests, ParseAuthorityOnly) {
 TEST(ParserEngineTests, ParseAuthorityWithUnusualCharacters) {
     ASSERT_EQ(ParserEngine::parseAuthority("https://www.amazon.co.uk:80#?/"),
         "www.amazon.co.uk:80");
-    ASSERT_EQ(ParserEngine::parseAuthority("https://www.amazon.co.uk:80#?/"),
+    ASSERT_EQ(ParserEngine::parseAuthority("https://www.amazon.co.uk:80^"),
         "www.amazon.co.uk:80");
 }
 
