@@ -3,24 +3,32 @@
 
 TEST(ParserTests, ParsePath) {
     // Test cases for path-abempty
-    ASSERT_EQ(Parser::parsePath("https://www.google.com/"), (std::vector< std::string >{"", }));
-    ASSERT_EQ(Parser::parsePath("https://www.google.com"), (std::vector< std::string >{}));
+    auto result = Parser::parsePath("https://www.google.com/");
+    ASSERT_TRUE(result.status);
+    ASSERT_EQ(result.content, (std::vector<std::string>{""}));
+
+    result = Parser::parsePath("https://www.google.com");
+    ASSERT_TRUE(result.status);
+    ASSERT_EQ(result.content, (std::vector<std::string>{}));
 
     // Test cases for path-absolute
-    ASSERT_EQ(Parser::parsePath("https://www.amazon.com/path/to/resource"),
-        (std::vector< std::string >{"", "path", "to", "resource"}));
+    result = Parser::parsePath("https://www.amazon.com/path/to/resource");
+    ASSERT_TRUE(result.status);
+    ASSERT_EQ(result.content, (std::vector<std::string>{"", "path", "to", "resource"}));
 
-    ASSERT_EQ(Parser::parsePath("https://www.google.com/foo/bar/"),
-        (std::vector< std::string >{"", "foo", "bar", }));
+    result = Parser::parsePath("https://www.google.com/foo/bar/");
+    ASSERT_TRUE(result.status);
+    ASSERT_EQ(result.content, (std::vector<std::string>{"", "foo", "bar", ""}));
 
-    ASSERT_EQ(Parser::parsePath("file:///C:/Users/Example/Documents/Projects/2024/Report.pdf"),
-        (std::vector< std::string >{"", "C:", "Users", "Example", "Documents", "Projects",
-            "2024", "Report.pdf"}
-            ));
-    ASSERT_EQ(Parser::parsePath("file://server/share/folder/file.txt"),
-        (std::vector< std::string >{"", "share", "folder", "file.txt"}));
+    result = Parser::parsePath("file:///C:/Users/Example/Documents/Projects/2024/Report.pdf");
+    ASSERT_TRUE(result.status);
+    ASSERT_EQ(result.content, (std::vector<std::string>{"", "C:", "Users", "Example", "Documents", "Projects", "2024", "Report.pdf"}));
 
-    // ASSERT_EQ(Parser::parsePath("foo/bar"),
-    //           (std::vector<std::string>{"foo","bar",}
-    //           ));
+    result = Parser::parsePath("file://server/share/folder/file.txt");
+    ASSERT_TRUE(result.status);
+    ASSERT_EQ(result.content, (std::vector<std::string>{"", "share", "folder", "file.txt"}));
+
+    // result = Parser::parsePath("foo/bar");
+    // ASSERT_FALSE(result.status);
+    // ASSERT_EQ(result.content, (std::vector<std::string>{}));
 }

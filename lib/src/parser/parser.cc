@@ -1,82 +1,77 @@
 #include "parser.h"
+#include "../extensions/string_extensions.h"
+#include "../validation/syntax_validator.h"
 
-std::optional<std::string> Parser::parseScheme(const std::string& uri) {
-    std::string scheme;
-    const auto pos = uri.find(':');
-    if (pos != std::string::npos) {
-        scheme = uri.substr(0, pos);
+ParseResult<std::string> Parser::parseScheme(const std::string& uri) {
+
+    auto authorityOrPathDelimiterStart = uri.find('/');
+    if (authorityOrPathDelimiterStart == std::string::npos) {
+        authorityOrPathDelimiterStart = uri.length();
     }
-    return scheme;
+    const auto schemeEnd = uri.substr(0, authorityOrPathDelimiterStart).find(':');
+    
+	if (schemeEnd == std::string::npos) return { true, "" };
+
+    std::string scheme = uri.substr(0, schemeEnd);
+    scheme = StringExtensions::lowercase(scheme);
+
+	if (!SyntaxValidator::validateScheme(scheme)) return { false, "" };
+	return { true, scheme };
+
 }
 
-std::optional<std::string> Parser::parseAuthority(const std::string& uri) {
-    std::string authority;
+ParseResult<std::string> Parser::parseAuthority(const std::string& uri) {
     const auto pos = uri.find("://");
-    if (pos == std::string::npos) return authority;
+    if (pos == std::string::npos) return { false, "" };
     const auto start = pos + 3;
-    if (start >= uri.size()) return authority;
+    if (start >= uri.size()) return { false, "" };
     const auto end = uri.find_first_of("/?#", start);
     if (end == std::string::npos) {
-        authority = uri.substr(start);
+        return { true, uri.substr(start) };
     }
-    else {
-        authority = uri.substr(start, end - start);
-    }
-    return authority;
+    return { true, uri.substr(start, end - start) };
 }
 
-std::optional<std::vector<std::string>> Parser::parsePath(const std::string& uri) {
-    std::vector<std::string> path; // Vector to store the path segments
+ParseResult<std::vector<std::string>> Parser::parsePath(const std::string& uri) {
+    std::vector<std::string> path;
 
-    // Find the position of "://", which indicates the end of the scheme
     auto schemeEnd = uri.find("://");
-    if (schemeEnd == std::string::npos) return path; // Return empty path if scheme is not found
+    if (schemeEnd == std::string::npos) return { false, path };
 
-    // Start position after the scheme
     auto start = schemeEnd + 3;
-    if (start >= uri.size()) return path; // Return empty path if URI ends after the scheme
+    if (start >= uri.size()) return { false, path };
 
-    // Find the start of the path
     auto pathStart = uri.find('/', start);
-    if (pathStart == std::string::npos) return path; // Return empty path if no '/' is found
+    if (pathStart == std::string::npos) return { false, path };
 
-    // Find the end of the path, which could be indicated by '?' or '#'
     auto pathEnd = uri.find_first_of("?#", pathStart);
     if (pathEnd == std::string::npos) {
-        pathEnd = uri.size(); // If no '?' or '#' is found, the path ends at the end of the URI
+        pathEnd = uri.size();
     }
 
-    // Extract the path string
     const auto pathStr = uri.substr(pathStart, pathEnd - pathStart);
     size_t segmentStart = 0;
 
-    // Loop to split the path into segments
     while (segmentStart < pathStr.size()) {
         auto segmentEnd = pathStr.find('/', segmentStart);
         if (segmentEnd == std::string::npos) {
-            path.push_back(pathStr.substr(segmentStart)); // Add the last segment
+            path.push_back(pathStr.substr(segmentStart));
             break;
         }
-        path.push_back(pathStr.substr(segmentStart, segmentEnd - segmentStart)); // Add the segment
-        segmentStart = segmentEnd + 1; // Move to the next segment
+        path.push_back(pathStr.substr(segmentStart, segmentEnd - segmentStart));
+        segmentStart = segmentEnd + 1;
     }
 
-    return path; // Return the vector of path segments
+    return { true, path };
 }
 
-std::optional<std::string> Parser::parseUserInfo(const std::string& authority) {
-    // authority = [ userinfo "@" ] host [ ":" port ]
-    // user:password@www.example.com:8080
-    // www.example.com:8080
-    std::string userInfo;
+ParseResult<std::string> Parser::parseUserInfo(const std::string& authority) {
     const auto at_pos = authority.find('@');
-    if (at_pos == std::string::npos) return userInfo;
-    userInfo = authority.substr(0, at_pos);
-    return userInfo;
+    if (at_pos == std::string::npos) return { false, "" };
+    return { true, authority.substr(0, at_pos) };
 }
 
-std::optional<std::string> Parser::parseHost(const std::string& authority) {
-    std::string host;
+ParseResult<std::string> Parser::parseHost(const std::string& authority) {
     const auto at_pos = authority.find('@');
     const auto colon_pos = authority.find_last_of(':');
 
@@ -85,24 +80,22 @@ std::optional<std::string> Parser::parseHost(const std::string& authority) {
 
     if (authority[hostStart] == '[') {
         hostEnd = authority.find(']', hostStart);
-        if (hostEnd == std::string::npos) return host;
+        if (hostEnd == std::string::npos) return { false, "" };
         hostEnd++;
     }
-    return authority.substr(hostStart, hostEnd - hostStart);
+    return { true, authority.substr(hostStart, hostEnd - hostStart) };
 }
 
-std::optional<std::string> Parser::parsePort(const std::string& authority) {
-    // temp dummy default port
-    std::string port = "80";
+ParseResult<std::string> Parser::parsePort(const std::string& authority) {
     const auto at_pos = authority.find('@');
     auto startSearch = at_pos == std::string::npos ? 0 : at_pos + 1;
     if (authority[startSearch] == '[') {
         startSearch = authority.find(']', startSearch);
-        if (startSearch == std::string::npos) return port;
+        if (startSearch == std::string::npos) return { false, "" };
     }
 
     const auto colon_pos = authority.find(':', startSearch);
 
-    if (colon_pos == std::string::npos) return port;
-    return authority.substr(colon_pos + 1);
+    if (colon_pos == std::string::npos) return { false, "80" };  // Default port
+    return { true, authority.substr(colon_pos + 1) };
 }

@@ -2,5 +2,7 @@
 #include <parser/parser.h>
 
 TEST(ParserTests, ParseUserInfo) {
-    ASSERT_EQ(Parser::parseUserInfo("user:password@www.example.com:8080"), "user:password");
+	auto result = Parser::parseUserInfo("user:password@www.example.com:8080");
+	ASSERT_TRUE(result.status);
+	ASSERT_EQ(result.content, "user:password");
 }
