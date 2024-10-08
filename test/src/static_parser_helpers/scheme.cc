@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <parser/parser.h>
 
-TEST(ParserTests, ParseScheme)
+TEST(StaticParseHelpers, ParseScheme)
 {
     // Test cases for different schemes
     constexpr size_t cursor = 0;
@@ -22,15 +22,8 @@ TEST(ParserTests, ParseScheme)
     ASSERT_EQ(result.content, "mailto");
 }
 
-TEST(ParserTests, NoScheme)
-{
-    size_t cursor = 0;
-    const auto result = Parser::parseScheme("www.example.com", cursor);
-    ASSERT_FALSE(result.error);
-    ASSERT_EQ(result.content, "");
-}
 
-TEST(UriTests, NoScheme)
+TEST(StaticParseHelpers, NoScheme)
 {
     Uri uri;
     auto result = Parser::parseScheme("foo/bar", 0);
@@ -38,7 +31,7 @@ TEST(UriTests, NoScheme)
     ASSERT_EQ("", uri.getScheme());
 }
 
-TEST(ParserTests, EmptyUriScheme)
+TEST(StaticParseHelpers, EmptyUriScheme)
 {
     size_t cursor = 0;
     const auto result = Parser::parseScheme("", cursor);
@@ -46,7 +39,7 @@ TEST(ParserTests, EmptyUriScheme)
     ASSERT_EQ(result.content, "");
 }
 
-TEST(ParserTests, SchemeCaseSensitive)
+TEST(StaticParseHelpers, SchemeCaseSensitive)
 {
     size_t cursor = 0;
     const auto result = Parser::parseScheme("hTTps://www.google.com/", cursor);
@@ -54,7 +47,7 @@ TEST(ParserTests, SchemeCaseSensitive)
     ASSERT_EQ(result.content, "https");
 }
 
-TEST(ParserTests, SchemeNotAllowedCharacters)
+TEST(StaticParseHelpers, SchemeNotAllowedCharacters)
 {
     size_t cursor = 0;
     auto result = Parser::parseScheme("++hTTps://www.google.com/", cursor);

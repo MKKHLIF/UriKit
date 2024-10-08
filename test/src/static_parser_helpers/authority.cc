@@ -2,7 +2,7 @@
 #include <parser/parser.h>
 
 
-TEST(ParserTests, ParseAuthorityWithPath)
+TEST(StaticParseHelpers, ParseAuthorityWithPath)
 {
     constexpr size_t cursor = 0;
 
@@ -15,7 +15,7 @@ TEST(ParserTests, ParseAuthorityWithPath)
     ASSERT_EQ(result.content, "user:password@www.example.com:8080");
 }
 
-TEST(ParserTests, ParseAuthorityWithQuery)
+TEST(StaticParseHelpers, ParseAuthorityWithQuery)
 {
     constexpr size_t cursor = 0;
 
@@ -24,7 +24,7 @@ TEST(ParserTests, ParseAuthorityWithQuery)
     ASSERT_EQ(result.content, "user:password@www.example.com:8080");
 }
 
-TEST(ParserTests, ParseAuthorityWithFragment)
+TEST(StaticParseHelpers, ParseAuthorityWithFragment)
 {
     constexpr size_t cursor = 0;
 
@@ -33,7 +33,7 @@ TEST(ParserTests, ParseAuthorityWithFragment)
     ASSERT_EQ(result.content, "user:password@www.example.com:8080");
 }
 
-TEST(ParserTests, ParseAuthorityOnly)
+TEST(StaticParseHelpers, ParseAuthorityOnly)
 {
     constexpr size_t cursor = 0;
 
@@ -54,7 +54,7 @@ TEST(ParserTests, ParseAuthorityOnly)
     ASSERT_EQ(result.content, "user:password@www.example.com");
 }
 
-TEST(ParserTests, ParseAuthorityWithUnusualCharacters)
+TEST(StaticParseHelpers, ParseAuthorityWithUnusualCharacters)
 {
     constexpr size_t cursor = 0;
 
@@ -67,7 +67,7 @@ TEST(ParserTests, ParseAuthorityWithUnusualCharacters)
     ASSERT_EQ(result.content, "www.amazon.co.uk:80");
 }
 
-TEST(ParserTests, ParseAuthorityWithoutAuthority)
+TEST(StaticParseHelpers, ParseAuthorityWithoutAuthority)
 {
     constexpr size_t cursor = 0;
 
@@ -80,7 +80,7 @@ TEST(ParserTests, ParseAuthorityWithoutAuthority)
     ASSERT_EQ(result.content, "");
 }
 
-TEST(ParserTests, ParseAuthorityForNetworkLocation)
+TEST(StaticParseHelpers, ParseAuthorityForNetworkLocation)
 {
     constexpr size_t cursor = 0;
 

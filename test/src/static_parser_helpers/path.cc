@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <parser/parser.h>
 
-TEST(ParserTests, ParsePath)
+TEST(StaticParseHelpers, ParsePath)
 {
     constexpr size_t cursor = 0;
 

@@ -2,7 +2,7 @@
 #include <uri/uri.h>
 #include <parser/parser.h>
 
-TEST(ParserTests, ParseRegisteredHost)
+TEST(StaticParseHelpers, ParseRegisteredHost)
 {
     constexpr size_t cursor = 0;
 
@@ -23,7 +23,7 @@ TEST(ParserTests, ParseRegisteredHost)
     ASSERT_EQ(result.content, "www.amazon.co.uk");
 }
 
-TEST(ParserTests, ParseHostIPv4)
+TEST(StaticParseHelpers, ParseHostIPv4)
 {
     constexpr size_t cursor = 0;
 
@@ -44,7 +44,7 @@ TEST(ParserTests, ParseHostIPv4)
     ASSERT_EQ(result.content, "127.0.0.1");
 }
 
-TEST(ParserTests, ParseHostIPv6)
+TEST(StaticParseHelpers, ParseHostIPv6)
 {
     constexpr size_t cursor = 0;
 
