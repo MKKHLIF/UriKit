@@ -30,6 +30,14 @@ TEST(ParserTests, NoScheme)
     ASSERT_EQ(result.content, "");
 }
 
+TEST(UriTests, NoScheme)
+{
+    Uri uri;
+    auto result = Parser::parseScheme("foo/bar", 0);
+    ASSERT_FALSE(result.error);
+    ASSERT_EQ("", uri.getScheme());
+}
+
 TEST(ParserTests, EmptyUriScheme)
 {
     size_t cursor = 0;
