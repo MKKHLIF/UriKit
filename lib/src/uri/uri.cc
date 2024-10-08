@@ -64,3 +64,105 @@ std::vector<std::string> Uri::getPath() const
     return this->pimpl_->path_;
 }
 
+uint16_t Uri::getPort() const
+{
+    return this->pimpl_->port_;
+}
+
+bool Uri::hasAuthority() const
+{
+    return this->pimpl_->hasAuthority();
+}
+
+bool Uri::hasPort() const
+{
+    return this->pimpl_->hasPort_;
+}
+
+bool Uri::hasQuery() const
+{
+    return this->pimpl_->hasQuery_;
+}
+
+bool Uri::hasFragment() const
+{
+    return this->pimpl_->hasFragment_;
+}
+
+std::string Uri::getAuthority() const
+{
+    return this->pimpl_->authority_;
+}
+
+std::string Uri::getUserInfo() const
+{
+    return this->pimpl_->userInfo_;
+}
+
+std::string Uri::getQuery() const
+{
+    return this->pimpl_->query_;
+}
+
+std::string Uri::getFragment() const
+{
+    return this->pimpl_->fragment_;
+}
+
+void Uri::setScheme(const std::string& scheme)
+{
+}
+
+void Uri::setUserInfo(const std::string& userinfo)
+{
+}
+
+void Uri::setHost(const std::string& host)
+{
+}
+
+void Uri::setPort(uint16_t port)
+{
+}
+
+void Uri::clearPort()
+{
+}
+
+void Uri::setPath(const std::vector<std::string>& path)
+{
+}
+
+void Uri::clearQuery()
+{
+}
+
+void Uri::setQuery(const std::string& query)
+{
+}
+
+void Uri::clearFragment()
+{
+}
+
+void Uri::setFragment(const std::string& fragment)
+{
+}
+
+std::string Uri::generateString() const
+{
+}
+
+bool Uri::isRelative() const
+{
+    return false;
+}
+
+bool Uri::containsRelativePath() const
+{
+}
+
+void Uri::normalizePath()
+{
+}
+

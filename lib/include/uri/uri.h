@@ -27,6 +27,40 @@ public:
 
 	[[nodiscard]] std::vector<std::string> getPath() const;
 
+	[[nodiscard]] uint16_t getPort() const;
+
+	[[nodiscard]] bool hasAuthority() const;
+
+	[[nodiscard]] bool hasPort() const;
+
+	[[nodiscard]] bool hasQuery() const;
+
+	[[nodiscard]] bool hasFragment() const;
+
+	[[nodiscard]] std::string getAuthority() const;
+
+	[[nodiscard]] std::string getUserInfo() const;
+
+	[[nodiscard]] std::string getQuery() const;
+
+	[[nodiscard]] std::string getFragment() const;
+
+	void setScheme(const std::string& scheme);
+	void setUserInfo(const std::string& userinfo);
+	void setHost(const std::string& host);
+	void setPort(uint16_t port);
+	void clearPort();
+	void setPath(const std::vector<std::string>& path);
+	void clearQuery();
+	void setQuery(const std::string& query);
+	void clearFragment();
+	void setFragment(const std::string& fragment);
+	[[nodiscard]] std::string generateString() const;
+
+	[[nodiscard]] bool isRelative() const;
+	[[nodiscard]] bool containsRelativePath() const;
+	void normalizePath();
+
 private:
 	struct UriImpl;
 	// exclusively owns the pimpl object it points to.
