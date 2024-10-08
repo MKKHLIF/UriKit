@@ -179,7 +179,7 @@ TEST(UriTests, parseRelativeVsNonRelativePaths)
     {
         Uri uri;
         ASSERT_TRUE(uri.parse(testVector.uriString)) << index;
-        ASSERT_EQ(testVector.containsRelativePath, uri.ContainsRelativePath()) << index;
+        ASSERT_EQ(testVector.containsRelativePath, uri.containsRelativePath()) << index;
         ++index;
     }
 }
@@ -769,7 +769,7 @@ TEST(UriTests, ReferenceResolution)
         ASSERT_TRUE(baseUri.parse(testVector.baseString));
         ASSERT_TRUE(relativeReferenceUri.parse(testVector.relativeReferenceString)) << index;
         ASSERT_TRUE(expectedTargetUri.parse(testVector.targetString)) << index;
-        const auto actualTargetUri = baseUri.Resolve(relativeReferenceUri);
+        const auto actualTargetUri = baseUri.resolve(relativeReferenceUri);
         ASSERT_EQ(expectedTargetUri, actualTargetUri) << index;
         ++index;
     }
@@ -902,16 +902,16 @@ TEST(UriTests, QueryEmptyButPresent)
 {
     Uri uri;
     ASSERT_TRUE(uri.parse("http://example.com?"));
-    ASSERT_TRUE(uri.HasQuery());
+    ASSERT_TRUE(uri.hasQuery());
     ASSERT_EQ("", uri.getQuery());
     ASSERT_EQ("http://example.com/?", uri.generateString());
     uri.clearQuery();
     ASSERT_EQ("http://example.com/", uri.generateString());
-    ASSERT_FALSE(uri.HasQuery());
+    ASSERT_FALSE(uri.hasQuery());
     ASSERT_TRUE(uri.parse("http://example.com"));
-    ASSERT_FALSE(uri.HasQuery());
+    ASSERT_FALSE(uri.hasQuery());
     uri.setQuery("");
-    ASSERT_TRUE(uri.HasQuery());
+    ASSERT_TRUE(uri.hasQuery());
     ASSERT_EQ("", uri.getQuery());
     ASSERT_EQ("http://example.com/?", uri.generateString());
 }
@@ -947,7 +947,7 @@ TEST(UriTests, ClearQuery)
     (void)uri.parse("http://www.example.com/?foo=bar");
     uri.clearQuery();
     EXPECT_EQ("http://www.example.com/", uri.generateString());
-    EXPECT_FALSE(uri.HasQuery());
+    EXPECT_FALSE(uri.hasQuery());
 }
 
 TEST(UriTests, PercentEncodePlusInQueries)

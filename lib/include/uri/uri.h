@@ -60,6 +60,7 @@ public:
 	[[nodiscard]] bool isRelative() const;
 	[[nodiscard]] bool containsRelativePath() const;
 	void normalizePath();
+	[[nodiscard]] Uri resolve(const Uri& relativeReference) const;
 
 private:
 	struct UriImpl;

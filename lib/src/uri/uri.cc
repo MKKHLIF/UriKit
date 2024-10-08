@@ -166,3 +166,7 @@ void Uri::normalizePath()
 {
 }
 
+Uri Uri::resolve(const Uri& relativeReference) const
+{
+}
+
