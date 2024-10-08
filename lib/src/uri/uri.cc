@@ -18,10 +18,12 @@ struct Uri::UriImpl
     bool hasFragment_ = false;
     std::string fragment_;
 
+    size_t cursor = 0;
+
     UriImpl() = default;
     ~UriImpl() = default;
 
-    bool HasAuthority() const
+    [[nodiscard]] bool hasAuthority() const
     {
         return !authority_.empty();
     }
@@ -33,15 +35,16 @@ Uri::Uri() : pimpl_(std::make_unique<Uri::UriImpl>())
 
 Uri::~Uri() = default;
 
-// To-do: call parser helper and fill the impl. and set other properties accordingly.
 bool Uri::parse(const std::string& uri) const
 {
-    const auto result = Parser::parseScheme(uri);
-    if (!result.status) return false;
+    const auto result = Parser::parseScheme(uri, this->pimpl_->cursor);
+    if (result.error) return false;
 
     const std::string scheme = result.content;
     if (!SyntaxValidator::validateScheme(scheme)) return false;
     this->pimpl_->scheme_ = scheme;
+    this->pimpl_->cursor += scheme.size();
+
 
     return true;
 }

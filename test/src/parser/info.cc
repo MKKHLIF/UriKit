@@ -1,8 +1,11 @@
 #include <gtest/gtest.h>
 #include <parser/parser.h>
 
-TEST(ParserTests, ParseUserInfo) {
-	auto result = Parser::parseUserInfo("user:password@www.example.com:8080");
-	ASSERT_TRUE(result.status);
+TEST(ParserTests, ParseUserInfo)
+{
+	constexpr size_t cursor = 0;
+
+	auto result = Parser::parseUserInfo("user:password@www.example.com:8080", cursor);
+	ASSERT_TRUE(result.error);
 	ASSERT_EQ(result.content, "user:password");
 }
