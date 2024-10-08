@@ -4,7 +4,8 @@
 #include <vector>
 #include <string>
 
-class Uri {
+class Uri
+{
 public:
 	Uri();
 
@@ -18,13 +19,13 @@ public:
 
 	~Uri();
 
-	bool parse(const std::string& uri) const;
+	[[nodiscard]] bool parse(const std::string& uri) const;
 
-	std::string getScheme() const;
+	[[nodiscard]] std::string getScheme() const;
 
-	std::string getHost() const;
+	[[nodiscard]] std::string getHost() const;
 
-	std::vector<std::string> getPath() const;
+	[[nodiscard]] std::vector<std::string> getPath() const;
 
 private:
 	struct UriImpl;
