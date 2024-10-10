@@ -7,17 +7,16 @@
 class Uri
 {
 public:
-	Uri();
 
-	Uri(const Uri& other) = delete;
+	Uri();
+	~Uri();
+
+	Uri(const Uri& other);
+	Uri(Uri&& other) noexcept;
 
 	Uri& operator=(const Uri& other);
+	Uri& operator=(Uri&& other) noexcept;
 
-	Uri& operator=(Uri&& other) = delete;
-
-	Uri(Uri&& other) = delete;
-
-	~Uri();
 
 	[[nodiscard]] bool parse(const std::string& uri) const;
 

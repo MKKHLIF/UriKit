@@ -34,7 +34,25 @@ Uri::Uri() : pimpl_(std::make_unique<Uri::UriImpl>())
 {
 }
 
+
+Uri::Uri(const Uri& other)
+    : pimpl_(new UriImpl)
+{
+    *this = other;
+}
+
 Uri::~Uri() = default;
+
+Uri::Uri(Uri&&) noexcept = default;
+
+Uri& Uri::operator=(const Uri& other) {
+    if (this != &other) {
+        *pimpl_ = *other.pimpl_;
+    }
+    return *this;
+}
+
+Uri& Uri::operator=(Uri&&) noexcept = default;
 
 bool Uri::parse(const std::string& uri) const
 {
@@ -49,6 +67,7 @@ bool Uri::parse(const std::string& uri) const
 
     return true;
 }
+
 
 std::string Uri::getScheme() const
 {
