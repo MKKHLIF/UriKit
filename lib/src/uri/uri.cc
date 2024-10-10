@@ -38,13 +38,13 @@ Uri::~Uri() = default;
 
 bool Uri::parse(const std::string& uri) const
 {
-    const auto result = Parser::parseScheme(uri, this->pimpl_->cursor);
+    const auto result = Parser::parseScheme(uri, pimpl_->cursor);
     if (result.error) return false;
 
     const std::string scheme = result.content;
     if (!SyntaxValidator::validateScheme(scheme)) return false;
-    this->pimpl_->scheme_ = scheme;
-    this->pimpl_->cursor += scheme.size();
+    pimpl_->scheme_ = scheme;
+    pimpl_->cursor += scheme.size();
 
 
     return true;
@@ -52,62 +52,62 @@ bool Uri::parse(const std::string& uri) const
 
 std::string Uri::getScheme() const
 {
-    return this->pimpl_->scheme_;
+    return pimpl_->scheme_;
 }
 
 std::string Uri::getHost() const
 {
-    return this->pimpl_->host_;
+    return pimpl_->host_;
 }
 
 std::vector<std::string> Uri::getPath() const
 {
-    return this->pimpl_->path_;
+    return pimpl_->path_;
 }
 
 uint16_t Uri::getPort() const
 {
-    return this->pimpl_->port_;
+    return pimpl_->port_;
 }
 
 bool Uri::hasAuthority() const
 {
-    return this->pimpl_->hasAuthority();
+    return pimpl_->hasAuthority();
 }
 
 bool Uri::hasPort() const
 {
-    return this->pimpl_->hasPort_;
+    return pimpl_->hasPort_;
 }
 
 bool Uri::hasQuery() const
 {
-    return this->pimpl_->hasQuery_;
+    return pimpl_->hasQuery_;
 }
 
 bool Uri::hasFragment() const
 {
-    return this->pimpl_->hasFragment_;
+    return pimpl_->hasFragment_;
 }
 
 std::string Uri::getAuthority() const
 {
-    return this->pimpl_->authority_;
+    return pimpl_->authority_;
 }
 
 std::string Uri::getUserInfo() const
 {
-    return this->pimpl_->userInfo_;
+    return pimpl_->userInfo_;
 }
 
 std::string Uri::getQuery() const
 {
-    return this->pimpl_->query_;
+    return pimpl_->query_;
 }
 
 std::string Uri::getFragment() const
 {
-    return this->pimpl_->fragment_;
+    return pimpl_->fragment_;
 }
 
 void Uri::setScheme(const std::string& scheme)
@@ -148,6 +148,8 @@ void Uri::clearFragment()
 
 void Uri::setFragment(const std::string& fragment)
 {
+    pimpl_->fragment_ = fragment;
+    pimpl_->hasFragment_ = true;
 }
 
 std::string Uri::generateString() const
