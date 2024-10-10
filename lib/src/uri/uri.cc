@@ -112,38 +112,54 @@ std::string Uri::getFragment() const
 
 void Uri::setScheme(const std::string& scheme)
 {
+    pimpl_->scheme_ = scheme;
 }
 
 void Uri::setUserInfo(const std::string& userinfo)
 {
+	pimpl_->userInfo_ = userinfo;
 }
 
 void Uri::setHost(const std::string& host)
 {
+	pimpl_->host_ = host;
 }
 
 void Uri::setPort(uint16_t port)
 {
+    pimpl_->port_ = port;
+    pimpl_->hasPort_ = true;
 }
 
 void Uri::clearPort()
 {
+    pimpl_->port_ = 0;
+	pimpl_->hasPort_ = false;
+
 }
 
 void Uri::setPath(const std::vector<std::string>& path)
 {
+	pimpl_->path_ = path;
 }
 
 void Uri::clearQuery()
 {
+    pimpl_->query_.clear();
+    pimpl_->hasQuery_ = false;
 }
 
 void Uri::setQuery(const std::string& query)
 {
+	pimpl_->query_ = query;
+	pimpl_->hasQuery_ = true;
 }
 
 void Uri::clearFragment()
 {
+    pimpl_->fragment_.clear();
+    pimpl_->hasFragment_ = false;
+
 }
 
 void Uri::setFragment(const std::string& fragment)
