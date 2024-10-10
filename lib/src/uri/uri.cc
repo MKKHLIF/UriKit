@@ -45,14 +45,53 @@ Uri::~Uri() = default;
 
 Uri::Uri(Uri&&) noexcept = default;
 
-Uri& Uri::operator=(const Uri& other) {
-    if (this != &other) {
+Uri& Uri::operator=(const Uri& other)
+{
+    if (this != &other)
+    {
         *pimpl_ = *other.pimpl_;
     }
     return *this;
 }
 
 Uri& Uri::operator=(Uri&&) noexcept = default;
+
+
+bool Uri::operator==(const Uri& other) const
+{
+    return (
+        (pimpl_->scheme_ == other.pimpl_->scheme_)
+        && (pimpl_->userInfo_ == other.pimpl_->userInfo_)
+        && (pimpl_->host_ == other.pimpl_->host_)
+        && (
+            (!pimpl_->hasPort_ && !other.pimpl_->hasPort_)
+            || (
+                (pimpl_->hasPort_ && other.pimpl_->hasPort_)
+                && (pimpl_->port_ == other.pimpl_->port_)
+            )
+        )
+        && (pimpl_->path_ == other.pimpl_->path_)
+        && (
+            (!pimpl_->hasQuery_ && !other.pimpl_->hasQuery_)
+            || (
+                (pimpl_->hasQuery_ && other.pimpl_->hasQuery_)
+                && (pimpl_->query_ == other.pimpl_->query_)
+            )
+        )
+        && (
+            (!pimpl_->hasFragment_ && !other.pimpl_->hasFragment_)
+            || (
+                (pimpl_->hasFragment_ && other.pimpl_->hasFragment_)
+                && (pimpl_->fragment_ == other.pimpl_->fragment_)
+            )
+        )
+    );
+}
+
+bool Uri::operator!=(const Uri& other) const
+{
+    return !(*this == other);
+}
 
 bool Uri::parse(const std::string& uri) const
 {
@@ -136,12 +175,12 @@ void Uri::setScheme(const std::string& scheme)
 
 void Uri::setUserInfo(const std::string& userinfo)
 {
-	pimpl_->userInfo_ = userinfo;
+    pimpl_->userInfo_ = userinfo;
 }
 
 void Uri::setHost(const std::string& host)
 {
-	pimpl_->host_ = host;
+    pimpl_->host_ = host;
 }
 
 void Uri::setPort(uint16_t port)
@@ -153,13 +192,12 @@ void Uri::setPort(uint16_t port)
 void Uri::clearPort()
 {
     pimpl_->port_ = 0;
-	pimpl_->hasPort_ = false;
-
+    pimpl_->hasPort_ = false;
 }
 
 void Uri::setPath(const std::vector<std::string>& path)
 {
-	pimpl_->path_ = path;
+    pimpl_->path_ = path;
 }
 
 void Uri::clearQuery()
@@ -170,15 +208,14 @@ void Uri::clearQuery()
 
 void Uri::setQuery(const std::string& query)
 {
-	pimpl_->query_ = query;
-	pimpl_->hasQuery_ = true;
+    pimpl_->query_ = query;
+    pimpl_->hasQuery_ = true;
 }
 
 void Uri::clearFragment()
 {
     pimpl_->fragment_.clear();
     pimpl_->hasFragment_ = false;
-
 }
 
 void Uri::setFragment(const std::string& fragment)
@@ -189,7 +226,7 @@ void Uri::setFragment(const std::string& fragment)
 
 std::string Uri::generateString() const
 {
-	return URIGenerator::generate(*this);
+    return URIGenerator::generate(*this);
 }
 
 bool Uri::isRelative() const
@@ -199,6 +236,7 @@ bool Uri::isRelative() const
 
 bool Uri::containsRelativePath() const
 {
+    return false;
 }
 
 void Uri::normalizePath()
@@ -207,5 +245,6 @@ void Uri::normalizePath()
 
 Uri Uri::resolve(const Uri& relativeReference) const
 {
+    return Uri();
 }
 

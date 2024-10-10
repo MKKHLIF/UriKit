@@ -7,7 +7,6 @@
 class Uri
 {
 public:
-
 	Uri();
 	~Uri();
 
@@ -17,6 +16,8 @@ public:
 	Uri& operator=(const Uri& other);
 	Uri& operator=(Uri&& other) noexcept;
 
+	bool operator==(const Uri& other) const;
+	bool operator!=(const Uri& other) const;
 
 	[[nodiscard]] bool parse(const std::string& uri) const;
 
