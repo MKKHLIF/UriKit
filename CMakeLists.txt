@@ -15,6 +15,5 @@ enable_testing()
 
 add_subdirectory("uri")
 add_subdirectory("test")
-add_subdirectory("app")
 
 
