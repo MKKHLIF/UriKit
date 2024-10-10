@@ -11,7 +11,7 @@ public:
 
 	Uri(const Uri& other) = delete;
 
-	Uri& operator=(const Uri& other) = delete;
+	Uri& operator=(const Uri& other);
 
 	Uri& operator=(Uri&& other) = delete;
 

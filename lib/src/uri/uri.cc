@@ -3,6 +3,7 @@
 #include <memory>
 #include "../validation/syntax_validator.h"
 #include "../parser/parser.h"
+#include "../generator/generator.h"
 
 struct Uri::UriImpl
 {
@@ -151,6 +152,7 @@ void Uri::setFragment(const std::string& fragment)
 
 std::string Uri::generateString() const
 {
+	return URIGenerator::generate(*this);
 }
 
 bool Uri::isRelative() const
