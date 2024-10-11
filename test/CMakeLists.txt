@@ -11,7 +11,7 @@ find_package(GTest CONFIG REQUIRED)
 
 target_link_libraries(${This} PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
 target_link_libraries(${This} PRIVATE p_uri)
-target_include_directories(${This} PRIVATE ${CMAKE_SOURCE_DIR}/lib/src)
+target_include_directories(${This} PRIVATE ${CMAKE_SOURCE_DIR}/uri/src)
 
 include(GoogleTest)
 gtest_discover_tests(${This})
