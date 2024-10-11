@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "../extensions/string_extensions.h"
-#include "../validation/syntax_validator.h"
+#include "string_extensions.h"
+#include "syntax_validator.h"
 
 ParseResult<std::string> Parser::parseScheme(const std::string& uri, size_t cursor)
 {

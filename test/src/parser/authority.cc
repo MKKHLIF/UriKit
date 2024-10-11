@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <parser/parser.h>
+#include <parser.h>
 
 
 TEST(StaticParseHelpers, ParseAuthorityWithPath)
