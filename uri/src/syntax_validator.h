@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "../characters/character.h"
+#include "character.h"
 
 class SyntaxValidator {
 public: 

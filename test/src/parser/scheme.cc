@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include 
+
+#include "parser_engine.h"
 
 TEST(StaticParseHelpers, ParseScheme)
 {

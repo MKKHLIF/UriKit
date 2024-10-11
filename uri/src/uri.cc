@@ -1,9 +1,9 @@
 #include <string>
 #include <uri/uri.h>
 #include <memory>
-#include "../validation/syntax_validator.h"
-#include "../parser/parser.h"
-#include "../generator/generator.h"
+#include "syntax_validator.h"
+#include "parser_engine.h"
+#include "generator.h"
 
 struct Uri::UriImpl
 {

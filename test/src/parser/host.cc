@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <uri/uri.h>
-#include <parser/parser.h>
+#include "parser_engine.h"
 
 TEST(StaticParseHelpers, ParseRegisteredHost)
 {
