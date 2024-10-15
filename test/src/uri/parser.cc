@@ -3,7 +3,7 @@
 
 TEST(UriTests, parseNoScheme)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("foo/bar"));
     ASSERT_EQ("", uri.getScheme());
     ASSERT_EQ(
@@ -17,7 +17,7 @@ TEST(UriTests, parseNoScheme)
 
 TEST(UriTests, parseUrl)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("http://www.example.com/foo/bar"));
     ASSERT_EQ("http", uri.getScheme());
     ASSERT_EQ("www.example.com", uri.getHost());
@@ -33,7 +33,7 @@ TEST(UriTests, parseUrl)
 
 TEST(UriTests, parseUrnDefaultPathDelimiter)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("urn:book:fantasy:Hobbit"));
     ASSERT_EQ("urn", uri.getScheme());
     ASSERT_EQ("", uri.getHost());
@@ -59,18 +59,18 @@ TEST(UriTests, parsePathCornerCases)
         {"foo/", {"foo", ""}},
     };
     size_t index = 0;
-    for (const auto& testVector : testVectors)
+    for (const auto& [pathIn, pathOut] : testVectors)
     {
         Uri uri;
-        ASSERT_TRUE(uri.parse(testVector.pathIn)) << index;
-        ASSERT_EQ(testVector.pathOut, uri.getPath()) << index;
+        ASSERT_TRUE(uri.parse(pathIn)) << index;
+        ASSERT_EQ(pathOut, uri.getPath()) << index;
         ++index;
     }
 }
 
 TEST(UriTests, parseHasAPortNumber)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("http://www.example.com:8080/foo/bar"));
     ASSERT_EQ("www.example.com", uri.getHost());
     ASSERT_TRUE(uri.hasPort());
@@ -79,7 +79,7 @@ TEST(UriTests, parseHasAPortNumber)
 
 TEST(UriTests, parseDoesNotHaveAPortNumber)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("http://www.example.com/foo/bar"));
     ASSERT_EQ("www.example.com", uri.getHost());
     ASSERT_FALSE(uri.hasPort());
@@ -87,7 +87,7 @@ TEST(UriTests, parseDoesNotHaveAPortNumber)
 
 TEST(UriTests, parseTwiceFirstWithPortNumberThenWithout)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("http://www.example.com:8080/foo/bar"));
     ASSERT_TRUE(uri.parse("http://www.example.com/foo/bar"));
     ASSERT_FALSE(uri.hasPort());
@@ -95,19 +95,19 @@ TEST(UriTests, parseTwiceFirstWithPortNumberThenWithout)
 
 TEST(UriTests, parseBadPortNumberPurelyAlphabetic)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_FALSE(uri.parse("http://www.example.com:spam/foo/bar"));
 }
 
 TEST(UriTests, parseBadPortNumberStartsNumericEndsAlphabetic)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_FALSE(uri.parse("http://www.example.com:8080spam/foo/bar"));
 }
 
 TEST(UriTests, parseLargestValidPortNumber)
 {
-    Uri uri;
+    const Uri uri;
     ASSERT_TRUE(uri.parse("http://www.example.com:65535/foo/bar"));
     ASSERT_TRUE(uri.hasPort());
     ASSERT_EQ(65535, uri.getPort());
