@@ -21,14 +21,18 @@ resolving URIs, ensuring compliance with the standard.
 
 The library is tested on the following platforms and compilers:
 
-| Platform | Compiler    | Version    |
-|----------|-------------|------------|
-| Windows  | MSVC        | latest     |
-| Linux    | GCC         | latest     |
-| Linux    | Clang       | latest     |
-| macOS    | Apple Clang | latest     |
+| Platform | Compiler    | Version |
+|----------|-------------|---------|
+| Windows  | MSVC        | latest  |
+| Linux    | GCC         | latest  |
+| Linux    | Clang       | latest  |
+| macOS    | Apple Clang | latest  |
 
 ## Documentation
 
 The full API documentation is available here:
 URL: [API Documentation](https://<your-username>.github.io/<repository-name>/)
+
+## License
+
+Licensed under the [MIT license](LICENSE.md).
