@@ -15,10 +15,10 @@ private:
 
     ParseResult<std::string> parseScheme(const std::string& str_rep);
     [[nodiscard]] ParseResult<std::string> parseAuthority(const std::string& str_rep);
-    [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& str_rep);
     [[nodiscard]] ParseResult<std::string> parseUserInfo(const std::string& str_rep);
     [[nodiscard]] ParseResult<std::string> parseHost(const std::string& str_rep);
     [[nodiscard]] ParseResult<std::string> parsePort(const std::string& str_rep);
+    [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& str_rep);
 };
 
 bool Parser::Imp::parse(const std::string& str_rep, const Uri* obj)
