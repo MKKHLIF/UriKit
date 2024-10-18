@@ -1,4 +1,7 @@
 #include "parser_engine.h"
+
+#include <iostream>
+
 #include "string_extensions.h"
 #include "syntax_validator.h"
 #include <uri/uri.h>
@@ -6,19 +9,21 @@
 class Parser::Imp
 {
 public:
-    Imp() = default;
+    Imp(): cursor(0)
+    {
+    };
     ~Imp() = default;
     bool parse(const std::string& str_rep, const Uri* obj);
 
 private:
-    size_t cursor = 0;
+    size_t cursor;
 
     ParseResult<std::string> parseScheme(const std::string& str_rep);
     [[nodiscard]] ParseResult<std::string> parseAuthority(const std::string& str_rep);
-    [[nodiscard]] ParseResult<std::string> parseUserInfo(const std::string& str_rep);
-    [[nodiscard]] ParseResult<std::string> parseHost(const std::string& str_rep);
-    [[nodiscard]] ParseResult<std::string> parsePort(const std::string& str_rep);
-    [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& str_rep);
+    // [[nodiscard]] ParseResult<std::string> parseUserInfo(const std::string& str_rep);
+    // [[nodiscard]] ParseResult<std::string> parseHost(const std::string& str_rep);
+    // [[nodiscard]] ParseResult<std::string> parsePort(const std::string& str_rep);
+    // [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& str_rep);
 };
 
 bool Parser::Imp::parse(const std::string& str_rep, const Uri* obj)
@@ -48,6 +53,9 @@ ParseResult<std::string> Parser::Imp::parseScheme(const std::string& str_rep)
     {
         authority_or_path_start = str_rep.length();
     }
+
+    std::cout << cursor << std::endl;
+
     const auto scheme_end = str_rep.substr(cursor, authority_or_path_start).find(':');
 
     if (scheme_end == std::string::npos)
@@ -75,7 +83,9 @@ ParseResult<std::string> Parser::Imp::parseAuthority(const std::string& str_rep)
     return {false, ""};
 }
 
-Parser::Parser() = default;
+Parser::Parser(): imp(std::make_unique<Imp>())
+{
+}
 
 Parser::~Parser() noexcept
 {

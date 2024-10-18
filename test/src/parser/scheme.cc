@@ -4,6 +4,15 @@
 
 TEST(StaticParseHelpers, ParseScheme)
 {
+    // const Uri uri;
+    // const bool success = uri.parse("https://www.google.com/search?q=uri");
+    // ASSERT_TRUE(success);
+    // ASSERT_EQ(uri.getScheme(), "https");
+
+
+    // ======================================================================================================================================================
+
+
     // Test cases for different schemes
     // constexpr size_t cursor = 0;
     // auto result = Parser::parseScheme("https://www.google.com/search?q=uri", cursor);

@@ -90,7 +90,7 @@ bool Uri::operator!=(const Uri& other) const
     return !(*this == other);
 }
 
-bool Uri::parse(const std::string& str)
+bool Uri::parse(const std::string& str) const
 {
     const Parser parser;
     return parser.parse(str, this);

@@ -19,7 +19,7 @@ public:
 	bool operator==(const Uri& other) const;
 	bool operator!=(const Uri& other) const;
 
-	[[nodiscard]] bool parse(const std::string& str);
+	[[nodiscard]] bool parse(const std::string& str) const;
 
 	[[nodiscard]] std::string getScheme() const;
 
