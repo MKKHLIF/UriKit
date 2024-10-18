@@ -25,7 +25,7 @@ public:
     Parser& operator=(const Parser&);
     Parser& operator=(Parser&&) noexcept;
 
-    [[nodiscard]] bool parse(const std::string& uri, const Uri* obj);
+    [[nodiscard]] bool parse(const std::string& uri, const Uri* obj) const;
 
 private:
     class Imp;

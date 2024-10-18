@@ -55,7 +55,7 @@ ParseResult<std::string> Parser::Imp::parseScheme(const std::string& str_rep)
         return {false, ""};
     }
 
-    auto result = {false, str_rep.substr(cursor, scheme_end)};
+    ParseResult result = {false, str_rep.substr(cursor, scheme_end)};
 
     cursor = scheme_end;
 
@@ -71,6 +71,8 @@ ParseResult<std::string> Parser::Imp::parseAuthority(const std::string& str_rep)
 
     // find the first character starting from cursor
     const auto path_end = str_rep.find_first_of("?#", cursor);
+
+    return {false, ""};
 }
 
 Parser::Parser() = default;
@@ -87,15 +89,15 @@ Parser::Parser(Parser&&) noexcept
 {
 }
 
-Parser& Parser::operator=(const Parser&)
-{
-}
+// Parser& Parser::operator=(const Parser&)
+// {
+// }
+//
+// Parser& Parser::operator=(Parser&&) noexcept
+// {
+// }
 
-Parser& Parser::operator=(Parser&&) noexcept
-{
-}
-
-bool Parser::parse(const std::string& uri, const Uri* obj)
+bool Parser::parse(const std::string& uri, const Uri* obj) const
 {
     return imp->parse(uri, obj);
 }
