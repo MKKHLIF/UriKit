@@ -19,7 +19,7 @@ public:
 	bool operator==(const Uri& other) const;
 	bool operator!=(const Uri& other) const;
 
-	[[nodiscard]] bool parse(const std::string& uri) const;
+	[[nodiscard]] bool parse(const std::string& str);
 
 	[[nodiscard]] std::string getScheme() const;
 
@@ -45,16 +45,17 @@ public:
 
 	[[nodiscard]] std::string getFragment() const;
 
-	void setScheme(const std::string& scheme);
-	void setUserInfo(const std::string& userinfo);
-	void setHost(const std::string& host);
-	void setPort(uint16_t port);
-	void clearPort();
-	void setPath(const std::vector<std::string>& path);
-	void clearQuery();
-	void setQuery(const std::string& query);
-	void clearFragment();
-	void setFragment(const std::string& fragment);
+	void setScheme(const std::string& scheme) const;
+	void setUserInfo(const std::string& userinfo) const;
+	void setHost(const std::string& host) const;
+	void setPort(uint16_t port) const;
+	void setPath(const std::vector<std::string>& path) const;
+	void setQuery(const std::string& query) const;
+	void setFragment(const std::string& fragment) const;
+
+	void clearPort() const;
+	void clearQuery() const;
+	void clearFragment() const;
 	[[nodiscard]] std::string generateString() const;
 
 	[[nodiscard]] bool isRelative() const;

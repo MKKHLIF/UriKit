@@ -1,7 +1,6 @@
 #include <string>
 #include <uri/uri.h>
 #include <memory>
-#include "syntax_validator.h"
 #include "parser_engine.h"
 #include "generator.h"
 
@@ -18,8 +17,6 @@ struct Uri::UriImpl
     std::string query_;
     bool hasFragment_ = false;
     std::string fragment_;
-
-    size_t cursor = 0;
 
     UriImpl() = default;
     ~UriImpl() = default;
@@ -93,20 +90,11 @@ bool Uri::operator!=(const Uri& other) const
     return !(*this == other);
 }
 
-bool Uri::parse(const std::string& uri) const
+bool Uri::parse(const std::string& str)
 {
-    const auto result = Parser::parseScheme(uri, pimpl_->cursor);
-    if (result.error) return false;
-
-    const std::string scheme = result.content;
-    if (!SyntaxValidator::validateScheme(scheme)) return false;
-    pimpl_->scheme_ = scheme;
-    pimpl_->cursor += scheme.size();
-
-
-    return true;
+    const Parser parser;
+    return parser.parse(str, this);
 }
-
 
 std::string Uri::getScheme() const
 {
@@ -168,57 +156,57 @@ std::string Uri::getFragment() const
     return pimpl_->fragment_;
 }
 
-void Uri::setScheme(const std::string& scheme)
+void Uri::setScheme(const std::string& scheme) const
 {
     pimpl_->scheme_ = scheme;
 }
 
-void Uri::setUserInfo(const std::string& userinfo)
+void Uri::setUserInfo(const std::string& userinfo) const
 {
     pimpl_->userInfo_ = userinfo;
 }
 
-void Uri::setHost(const std::string& host)
+void Uri::setHost(const std::string& host) const
 {
     pimpl_->host_ = host;
 }
 
-void Uri::setPort(uint16_t port)
+void Uri::setPort(const uint16_t port) const
 {
     pimpl_->port_ = port;
     pimpl_->hasPort_ = true;
 }
 
-void Uri::clearPort()
+void Uri::clearPort() const
 {
     pimpl_->port_ = 0;
     pimpl_->hasPort_ = false;
 }
 
-void Uri::setPath(const std::vector<std::string>& path)
+void Uri::setPath(const std::vector<std::string>& path) const
 {
     pimpl_->path_ = path;
 }
 
-void Uri::clearQuery()
+void Uri::clearQuery() const
 {
     pimpl_->query_.clear();
     pimpl_->hasQuery_ = false;
 }
 
-void Uri::setQuery(const std::string& query)
+void Uri::setQuery(const std::string& query) const
 {
     pimpl_->query_ = query;
     pimpl_->hasQuery_ = true;
 }
 
-void Uri::clearFragment()
+void Uri::clearFragment() const
 {
     pimpl_->fragment_.clear();
     pimpl_->hasFragment_ = false;
 }
 
-void Uri::setFragment(const std::string& fragment)
+void Uri::setFragment(const std::string& fragment) const
 {
     pimpl_->fragment_ = fragment;
     pimpl_->hasFragment_ = true;

@@ -18,10 +18,16 @@ struct ParseResult
 class Parser
 {
 public:
-    static ParseResult<std::string> parseScheme(const std::string& uri, size_t cursor);
-    static ParseResult<std::string> parseAuthority(const std::string& uri, size_t cursor);
-    static ParseResult<std::vector<std::string>> parsePath(const std::string& uri, size_t cursor);
-    static ParseResult<std::string> parseHost(const std::string& authority, size_t cursor);
-    static ParseResult<std::string> parsePort(const std::string& authority, size_t cursor);
-    static ParseResult<std::string> parseUserInfo(const std::string& authority, size_t cursor);
+    Parser();
+    ~Parser() noexcept;
+    Parser(const Parser&);
+    Parser(Parser&&) noexcept;
+    Parser& operator=(const Parser&);
+    Parser& operator=(Parser&&) noexcept;
+
+    [[nodiscard]] bool parse(const std::string& uri, const Uri* obj);
+
+private:
+    class Imp;
+    std::unique_ptr<Imp> imp;
 };

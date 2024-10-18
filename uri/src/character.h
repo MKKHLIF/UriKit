@@ -3,9 +3,9 @@
 #include <initializer_list>
 #include <memory>
 
-class CharacterSet {
+class CharacterSet
+{
 public:
-
     // Life cycle
     ~CharacterSet() noexcept;
     CharacterSet(const CharacterSet&);
@@ -17,13 +17,11 @@ public:
     CharacterSet();
     CharacterSet(char c);
     CharacterSet(char start, char end);
-    CharacterSet(std::initializer_list< const CharacterSet > characterSets);
+    CharacterSet(std::initializer_list<const CharacterSet> characterSets);
     // Methods
-    bool contains(char c) const;
-
+    [[nodiscard]] bool contains(char c) const;
 
 private:
     struct Impl;
-    std::unique_ptr< Impl > impl_;
-
+    std::unique_ptr<Impl> impl_;
 };

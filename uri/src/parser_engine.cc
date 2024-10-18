@@ -1,113 +1,101 @@
 #include "parser_engine.h"
-#include <iostream>
 #include "string_extensions.h"
 #include "syntax_validator.h"
+#include <uri/uri.h>
 
-ParseResult<std::string> Parser::parseScheme(const std::string& uri, size_t cursor)
+class Parser::Imp
 {
-    auto authorityOrPathDelimiterStart = uri.find('/');
-    if (authorityOrPathDelimiterStart == std::string::npos)
-    {
-        authorityOrPathDelimiterStart = uri.length();
-    }
-    const auto schemeEnd = uri.substr(0, authorityOrPathDelimiterStart).find(':');
+public:
+    Imp() = default;
+    ~Imp() = default;
+    bool parse(const std::string& str_rep, const Uri* obj);
 
-    if (schemeEnd == std::string::npos) return {false, ""};
+private:
+    size_t cursor = 0;
 
-    std::string scheme = uri.substr(0, schemeEnd);
-    scheme = StringExtensions::lowercase(scheme);
+    ParseResult<std::string> parseScheme(const std::string& str_rep);
+    [[nodiscard]] ParseResult<std::string> parseAuthority(const std::string& str_rep);
+    [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& str_rep);
+    [[nodiscard]] ParseResult<std::string> parseUserInfo(const std::string& str_rep);
+    [[nodiscard]] ParseResult<std::string> parseHost(const std::string& str_rep);
+    [[nodiscard]] ParseResult<std::string> parsePort(const std::string& str_rep);
+};
 
-    if (!SyntaxValidator::validateScheme(scheme)) return {true, ""};
-    return {false, scheme};
+bool Parser::Imp::parse(const std::string& str_rep, const Uri* obj)
+{
+    auto result = parseScheme(str_rep);
+    if (!result.error) return false;
+
+    // To-do: check if the scheme is valid
+    obj->setScheme(result.content);
+
+
+    result = parseAuthority(str_rep);
+
+    return true;
 }
 
-ParseResult<std::string> Parser::parseAuthority(const std::string& uri, size_t cursor)
+ParseResult<std::string> Parser::Imp::parseScheme(const std::string& str_rep)
 {
-    const auto pos = uri.find("://");
-    if (pos == std::string::npos) return {false, ""};
-    const auto start = pos + 3;
-    if (start >= uri.size()) return {false, ""};
-    const auto end = uri.find_first_of("/?#", start);
-    if (end == std::string::npos)
+    // "https://www.google.com/search?q=uri"
+    // "file:///C:/Users/Example/Documents/Projects/2024/Report.pdf"
+    // "mailto:user@example.com"
+    // "foo/bar"
+
+    auto authority_or_path_start = str_rep.find('/');
+
+    if (authority_or_path_start == std::string::npos)
     {
-        return {true, uri.substr(start)};
+        authority_or_path_start = str_rep.length();
     }
-    return {true, uri.substr(start, end - start)};
+    const auto scheme_end = str_rep.substr(cursor, authority_or_path_start).find(':');
+
+    if (scheme_end == std::string::npos)
+    {
+        return {false, ""};
+    }
+
+    auto result = {false, str_rep.substr(cursor, scheme_end)};
+
+    cursor = scheme_end;
+
+    return result;
 }
 
-ParseResult<std::vector<std::string>> Parser::parsePath(const std::string& uri, size_t cursor)
+ParseResult<std::string> Parser::Imp::parseAuthority(const std::string& str_rep)
 {
-    std::vector<std::string> path;
+    // "://www.google.com/search?q=uri"
+    // ":///C:/Users/Example/Documents/Projects/2024/Report.pdf"
+    // ":user@example.com"
+    // "foo/bar"
 
-    auto schemeEnd = uri.find("://");
-    if (schemeEnd == std::string::npos) return {false, path};
-
-    auto start = schemeEnd + 3;
-    if (start >= uri.size()) return {false, path};
-
-    auto pathStart = uri.find('/', start);
-    if (pathStart == std::string::npos) return {false, path};
-
-    auto pathEnd = uri.find_first_of("?#", pathStart);
-    if (pathEnd == std::string::npos)
-    {
-        pathEnd = uri.size();
-    }
-
-    const auto pathStr = uri.substr(pathStart, pathEnd - pathStart);
-    size_t segmentStart = 0;
-
-    while (segmentStart < pathStr.size())
-    {
-        auto segmentEnd = pathStr.find('/', segmentStart);
-        if (segmentEnd == std::string::npos)
-        {
-            path.push_back(pathStr.substr(segmentStart));
-            break;
-        }
-        path.push_back(pathStr.substr(segmentStart, segmentEnd - segmentStart));
-        segmentStart = segmentEnd + 1;
-    }
-
-    return {true, path};
+    // find the first character starting from cursor
+    const auto path_end = str_rep.find_first_of("?#", cursor);
 }
 
-ParseResult<std::string> Parser::parseUserInfo(const std::string& authority, size_t cursor)
+Parser::Parser() = default;
+
+Parser::~Parser() noexcept
 {
-    const auto at_pos = authority.find('@');
-    if (at_pos == std::string::npos) return {false, ""};
-    return {true, authority.substr(0, at_pos)};
 }
 
-ParseResult<std::string> Parser::parseHost(const std::string& authority, size_t cursor)
+Parser::Parser(const Parser&)
 {
-    const auto at_pos = authority.find('@');
-    const auto colon_pos = authority.find_last_of(':');
-
-    const auto hostStart = at_pos == std::string::npos ? 0 : at_pos + 1;
-    auto hostEnd = colon_pos == std::string::npos ? authority.size() : colon_pos;
-
-    if (authority[hostStart] == '[')
-    {
-        hostEnd = authority.find(']', hostStart);
-        if (hostEnd == std::string::npos) return {false, ""};
-        hostEnd++;
-    }
-    return {true, authority.substr(hostStart, hostEnd - hostStart)};
 }
 
-ParseResult<std::string> Parser::parsePort(const std::string& authority, size_t cursor)
+Parser::Parser(Parser&&) noexcept
 {
-    const auto at_pos = authority.find('@');
-    auto startSearch = at_pos == std::string::npos ? 0 : at_pos + 1;
-    if (authority[startSearch] == '[')
-    {
-        startSearch = authority.find(']', startSearch);
-        if (startSearch == std::string::npos) return {false, ""};
-    }
+}
 
-    const auto colon_pos = authority.find(':', startSearch);
+Parser& Parser::operator=(const Parser&)
+{
+}
 
-    if (colon_pos == std::string::npos) return {false, "80"}; // Default port
-    return {true, authority.substr(colon_pos + 1)};
+Parser& Parser::operator=(Parser&&) noexcept
+{
+}
+
+bool Parser::parse(const std::string& uri, const Uri* obj)
+{
+    return imp->parse(uri, obj);
 }
