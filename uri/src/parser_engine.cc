@@ -54,8 +54,6 @@ ParseResult<std::string> Parser::Imp::parseScheme(const std::string& str_rep)
         authority_or_path_start = str_rep.length();
     }
 
-    std::cout << cursor << std::endl;
-
     const auto scheme_end = str_rep.substr(cursor, authority_or_path_start).find(':');
 
     if (scheme_end == std::string::npos) return {false, ""};
