@@ -58,12 +58,16 @@ ParseResult<std::string> Parser::Imp::parseScheme(const std::string& str_rep)
 
     const auto scheme_end = str_rep.substr(cursor, authority_or_path_start).find(':');
 
-    if (scheme_end == std::string::npos)
-    {
-        return {false, ""};
-    }
+    if (scheme_end == std::string::npos) return {false, ""};
 
-    ParseResult result = {false, str_rep.substr(cursor, scheme_end)};
+
+    std::string scheme = str_rep.substr(cursor, scheme_end);
+
+    scheme = StringExtensions::lowercase(scheme);
+
+    if (!SyntaxValidator::validateScheme(scheme)) return {true, ""};
+
+    ParseResult result = {false, scheme};
 
     cursor = scheme_end;
 
