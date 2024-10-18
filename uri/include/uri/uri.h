@@ -21,29 +21,19 @@ public:
 
 	[[nodiscard]] bool parse(const std::string& str) const;
 
-	[[nodiscard]] std::string getScheme() const;
-
-	[[nodiscard]] std::string getHost() const;
-
-	[[nodiscard]] std::vector<std::string> getPath() const;
-
-	[[nodiscard]] uint16_t getPort() const;
-
 	[[nodiscard]] bool hasAuthority() const;
-
 	[[nodiscard]] bool hasPort() const;
-
 	[[nodiscard]] bool hasQuery() const;
-
 	[[nodiscard]] bool hasFragment() const;
 
 	[[nodiscard]] std::string getAuthority() const;
-
 	[[nodiscard]] std::string getUserInfo() const;
-
 	[[nodiscard]] std::string getQuery() const;
-
 	[[nodiscard]] std::string getFragment() const;
+	[[nodiscard]] std::string getScheme() const;
+	[[nodiscard]] std::string getHost() const;
+	[[nodiscard]] std::vector<std::string> getPath() const;
+	[[nodiscard]] uint16_t getPort() const;
 
 	void setScheme(const std::string& scheme) const;
 	void setUserInfo(const std::string& userinfo) const;
