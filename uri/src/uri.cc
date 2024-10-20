@@ -7,7 +7,6 @@
 struct Uri::UriImpl
 {
     std::string scheme_;
-    std::string authority_;
     std::string userInfo_;
     std::string host_;
     bool hasPort_ = false;
@@ -23,7 +22,7 @@ struct Uri::UriImpl
 
     [[nodiscard]] bool hasAuthority() const
     {
-        return !authority_.empty();
+        return false;
     }
 };
 
@@ -138,7 +137,7 @@ bool Uri::hasFragment() const
 
 std::string Uri::getAuthority() const
 {
-    return pimpl_->authority_;
+    return "";
 }
 
 std::string Uri::getUserInfo() const

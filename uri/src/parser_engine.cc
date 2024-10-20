@@ -67,22 +67,19 @@ ParseResult<std::string> Parser::Imp::parseScheme(const std::string& str_rep)
 
     ParseResult result = {false, scheme};
 
-    cursor = scheme_end;
+    cursor = scheme_end + 1;
 
     return result;
 }
 
 ParseResult<std::string> Parser::Imp::parseAuthority(const std::string& str_rep)
 {
-    // "://www.google.com/search?q=uri"
-    // ":///C:/Users/Example/Documents/Projects/2024/Report.pdf"
-    // ":user@example.com"
+    // "//www.google.com/search?q=uri"
+    // "///C:/Users/Example/Documents/Projects/2024/Report.pdf"
+    // "user@example.com"
     // "foo/bar"
 
-    // find the first character starting from cursor
-    const auto path_end = str_rep.find_first_of("?#", cursor);
-
-    return {false, ""};
+    if (str_rep[cursor] != ':') return {false, ""};
 }
 
 Parser::Parser(): imp(std::make_unique<Imp>())
