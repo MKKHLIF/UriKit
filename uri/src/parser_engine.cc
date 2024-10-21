@@ -28,12 +28,13 @@ private:
 
 bool Parser::Imp::parse(const std::string& str_rep, const Uri* obj)
 {
+    
     auto result = parseScheme(str_rep);
     if (result.error) return false;
 
-    // To-do: check if the scheme is valid
-    obj->setScheme(result.content);
-
+    if (!result.content.empty()) {
+        obj->setScheme(result.content);
+    }
 
     result = parseAuthority(str_rep);
 
