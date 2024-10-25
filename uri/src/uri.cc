@@ -205,6 +205,20 @@ void Uri::clearFragment() const
     pimpl_->hasFragment_ = false;
 }
 
+void Uri::reset() const {
+    pimpl_->scheme_.clear();
+    pimpl_->userInfo_.clear();
+    pimpl_->host_.clear();
+    pimpl_->port_ = 0;
+    pimpl_->path_.clear();
+    pimpl_->query_.clear();
+    pimpl_->fragment_.clear();
+    pimpl_->hasPort_ = false;
+    pimpl_->hasQuery_ = false;
+    pimpl_->hasFragment_ = false;
+
+}
+
 void Uri::setFragment(const std::string& fragment) const
 {
     pimpl_->fragment_ = fragment;
