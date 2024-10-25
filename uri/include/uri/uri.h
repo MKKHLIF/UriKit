@@ -46,6 +46,7 @@ public:
 	void clearPort() const;
 	void clearQuery() const;
 	void clearFragment() const;
+	void reset() const;
 	[[nodiscard]] std::string generateString() const;
 
 	[[nodiscard]] bool isRelative() const;
