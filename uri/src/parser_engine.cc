@@ -23,14 +23,17 @@ private:
     // [[nodiscard]] ParseResult<std::string> parseUserInfo(const std::string& authority);
     // [[nodiscard]] ParseResult<std::string> parseHost(const std::string& authority);
     // [[nodiscard]] ParseResult<std::string> parsePort(const std::string& authority);
-    // [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& path);
+    [[nodiscard]] ParseResult<std::vector<std::string>> parsePath(const std::string& path);
 };
 
 bool Parser::Imp::parse(const std::string& str, const Uri* obj)
 {
     
     auto result = parseScheme(str);
-    if (result.error) return false;
+    if (result.error) {
+        obj->reset();
+        return false;
+    }
 
     if (!result.content.empty()) {
         obj->setScheme(result.content);
@@ -60,12 +63,20 @@ bool Parser::Imp::parse(const std::string& str, const Uri* obj)
         if (result.error) return false;
 
         result = parseAuthority(path);
-        if (result.error) return false;
+        if (result.error) {
+            obj->reset();
+            return false;
+        }
 
     }
     // relative uri
     else {
-
+        obj->reset();
+        auto result = parsePath(str);
+        if (result.error) {
+            obj->reset();
+            return false;
+        }
     }
 
     return true;
@@ -107,6 +118,9 @@ ParseResult<std::string> Parser::Imp::parseAuthority(const std::string& str)
 {
 
     return {false, ""};
+}
+
+ParseResult<std::vector<std::string>> Parser::Imp::parsePath(const std::string &path) {
 }
 
 Parser::Parser(): imp(std::make_unique<Imp>())
