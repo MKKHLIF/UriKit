@@ -1,19 +1,20 @@
-// #include <gtest/gtest.h>
-// #include <uri/uri.h>
+#include <gtest/gtest.h>
+#include <uri/uri.h>
 //
-// TEST(UriTests, parseNoScheme)
-// {
-//     const Uri uri;
-//     ASSERT_TRUE(uri.parse("foo/bar"));
-//     ASSERT_EQ("", uri.getScheme());
-//     ASSERT_EQ(
-//         (std::vector< std::string >{
-//             "foo",
-//             "bar",
-//             }),
-//         uri.getPath()
-//     );
-// }
+TEST(UriTests, parseNoScheme) {
+    const Uri uri;
+    const bool success = uri.parse("foo/bar");
+    ASSERT_TRUE(success);
+    ASSERT_EQ("", uri.getScheme());
+    ASSERT_EQ(
+        (std::vector< std::string >{
+            "foo",
+            "bar",
+            }),
+        uri.getPath()
+    );
+}
+
 //
 // TEST(UriTests, parseUrl)
 // {
