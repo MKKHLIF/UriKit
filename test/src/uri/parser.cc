@@ -15,25 +15,23 @@ TEST(UriTests, parseNoScheme) {
     );
 }
 
-//
-// TEST(UriTests, parseUrl)
-// {
-//     const Uri uri;
-//     ASSERT_TRUE(uri.parse("http://www.example.com/foo/bar"));
-//     ASSERT_EQ("http", uri.getScheme());
-//     ASSERT_EQ("www.example.com", uri.getHost());
-//     ASSERT_EQ(
-//         (std::vector< std::string >{
-//             "",
-//             "foo",
-//             "bar",
-//             }),
-//         uri.getPath()
-//     );
-// }
-//
-// TEST(UriTests, parseUrnDefaultPathDelimiter)
-// {
+
+TEST(UriTests, parseUrl) {
+    const Uri uri;
+    ASSERT_TRUE(uri.parse("http://www.example.com/foo/bar"));
+    ASSERT_EQ("http", uri.getScheme());
+    ASSERT_EQ("www.example.com", uri.getHost());
+    ASSERT_EQ(
+        (std::vector< std::string >{
+            "",
+            "foo",
+            "bar",
+            }),
+        uri.getPath()
+    );
+}
+
+// TEST(UriTests, parseUrnDefaultPathDelimiter) {
 //     const Uri uri;
 //     ASSERT_TRUE(uri.parse("urn:book:fantasy:Hobbit"));
 //     ASSERT_EQ("urn", uri.getScheme());
@@ -45,7 +43,7 @@ TEST(UriTests, parseNoScheme) {
 //         uri.getPath()
 //     );
 // }
-//
+
 // TEST(UriTests, parsePathCornerCases)
 // {
 //     struct TestVector
