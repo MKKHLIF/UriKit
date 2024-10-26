@@ -79,6 +79,7 @@ bool Parser::Imp::parse(const std::string &str, const Uri *obj) {
             obj->reset();
             return false;
         }
+        obj->setPath(parse_path_result.content);
     }
 
     return true;
@@ -166,13 +167,12 @@ ParseResult<std::vector<std::string> > Parser::Imp::parsePath(std::string path) 
             if (path_delimiter == std::string::npos) {
                 result.push_back(path);
                 break;
-            } else {
-                result.emplace_back(
-                    path.begin(),
-                    path.begin() + path_delimiter
-                );
-                path = path.substr(path_delimiter + 1);
             }
+            result.emplace_back(
+                path.begin(),
+                path.begin() + path_delimiter
+            );
+            path = path.substr(path_delimiter + 1);
         }
         // for (auto& segment: path) {
         //     if (!DecodeElement(segment, PCHAR_NOT_PCT_ENCODED)) {
