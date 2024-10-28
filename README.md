@@ -23,10 +23,10 @@ The library is tested on the following platforms and compilers:
 
 | Platform | Compiler    | Version |
 |----------|-------------|---------|
-| Windows  | MSVC        | latest  |
-| Linux    | GCC         | latest  |
-| Linux    | Clang       | latest  |
-| macOS    | Apple Clang | latest  |
+| Windows  | MSVC        | 19.40 (Visual Studio 2022 v17.10)  |
+| Linux    | GCC         | 14.2  |
+| Linux    | Clang       | 14.0.0  |
+| macOS    | Apple Clang | 14.0.0  |
 
 ## Documentation
 
