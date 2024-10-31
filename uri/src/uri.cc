@@ -127,6 +127,7 @@ std::string Uri::getAuthority() const {
     if (!pimpl_->userInfo_.empty()) {
         authority += pimpl_->userInfo_ + "@";
     }
+    return authority;
 }
 
 std::string Uri::getUserInfo() const {
