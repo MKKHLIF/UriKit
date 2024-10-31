@@ -17,6 +17,30 @@ resolving URIs, ensuring compliance with the standard.
 - **Query and Fragment Handling**: Parse and handle query and fragment components, including empty but present queries
   and fragments.
 
+## Prerequisites
+
+To Build this project, you need to have **vcpkg** installed and properly configured. Follow these steps (Windows):
+
+1. **Install vcpkg:**
+
+- Clone the vcpkg repository:
+  ```bash
+  git clone https://github.com/microsoft/vcpkg.git
+  ```
+- Navigate to the vcpkg directory:
+  ```bash
+  cd vcpkg
+  ```
+- Run the bootstrap script:
+  ```bash
+  .\bootstrap-vcpkg.bat
+  ```
+
+2. **Integrate vcpkg with Visual Studio:**
+   Run the following command in the vcpkg directory:
+   ```bash
+   .\vcpkg integrate install
+
 ## Platforms and Compilers
 
 The library is tested on the following platforms and compilers:
