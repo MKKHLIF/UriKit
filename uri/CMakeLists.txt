@@ -3,9 +3,7 @@
 file(GLOB_RECURSE SRC_FILES "*.cpp" "*.cc")
 file(GLOB_RECURSE HEADER_FILES "*.h" "*.hpp")
 
-add_library(${This} STATIC ${SRC_FILES} ${HEADER_FILES}
-        src/characters/character_sets.h
-        src/characters/character_sets.cc)
+add_library(${This} STATIC ${SRC_FILES} ${HEADER_FILES})
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
     set_property(TARGET ${This} PROPERTY CXX_STANDARD 20)
