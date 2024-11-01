@@ -2,7 +2,7 @@
 #include <uri/uri.h>
 #include <memory>
 #include "parser_engine.h"
-#include "generator.h"
+#include "gen.h"
 
 struct Uri::UriImpl {
     std::string scheme_;

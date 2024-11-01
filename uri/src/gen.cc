@@ -1,4 +1,4 @@
-#include "generator.h"
+#include "gen.h"
 
 std::string URIGenerator::generate(const Uri& uri)
 {
