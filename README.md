@@ -19,38 +19,20 @@ resolving URIs, ensuring compliance with the standard.
 
 ## Prerequisites
 
-To Build this project, you need to have **vcpkg** installed and properly configured. Follow these steps (Windows):
-
-1. **Install vcpkg:**
-
-- Clone the vcpkg repository:
-  ```bash
-  git clone https://github.com/microsoft/vcpkg.git
-  ```
-- Navigate to the vcpkg directory:
-  ```bash
-  cd vcpkg
-  ```
-- Run the bootstrap script:
-  ```bash
-  .\bootstrap-vcpkg.bat
-  ```
-
-2. **Integrate vcpkg with Visual Studio:**
-   Run the following command in the vcpkg directory:
-   ```bash
-   .\vcpkg integrate install
+- CMake 3.8 or later
+- microsoft vcpkg
+- C++17 toolchain compatible with CMake for your development platform
 
 ## Platforms and Compilers
 
 The library is tested on the following platforms and compilers:
 
-| Platform | Compiler    | Version |
-|----------|-------------|---------|
-| Windows  | MSVC        | 19.40 (Visual Studio 2022 v17.10)  |
-| Linux    | GCC         | 14.2  |
-| Linux    | Clang       | 14.0.0  |
-| macOS    | Apple Clang | 14.0.0  |
+| Platform | Compiler    | Version                           |
+|----------|-------------|-----------------------------------|
+| Windows  | MSVC        | 19.40 (Visual Studio 2022 v17.10) |
+| Linux    | GCC         | 14.2                              |
+| Linux    | Clang       | 14.0.0                            |
+| macOS    | Apple Clang | 14.0.0                            |
 
 ## Documentation
 
