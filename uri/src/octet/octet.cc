@@ -4,7 +4,6 @@
 #include "../characters/character_sets.h"
 
 bool OctetValidator::isValidOctet(const std::string &octet) {
-    // Check if the string is empty
     if (octet.empty()) {
         return false;
     }
@@ -14,14 +13,12 @@ bool OctetValidator::isValidOctet(const std::string &octet) {
         return false;
     }
 
-    // Check if all characters are digits
     for (const char c: octet) {
         if (!CharacterSets::DIGIT.contains(c)) {
             return false;
         }
     }
 
-    // Convert to integer and check range
     try {
         const int value = std::stoi(octet);
         return value >= 0 && value <= 255;

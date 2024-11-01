@@ -1,7 +1,5 @@
 #include "parser_engine.h"
 
-#include <iostream>
-
 #include "../extensions/str.h"
 #include "../validation/syntax_validator.h"
 #include <uri/uri.h>
