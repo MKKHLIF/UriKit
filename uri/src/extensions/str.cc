@@ -1,4 +1,4 @@
-#include "string_extensions.h"
+#include "str.h"
 
 std::string StringExtensions::lowercase(const std::string& str)
 {
