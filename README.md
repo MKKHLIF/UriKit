@@ -1,4 +1,4 @@
-# URI-RFC-3986
+# URI-RFC3986
 
 This library provides an implementation of the URI (Uniform Resource Identifier) specifications as defined
 in [RFC 3986](https://tools.ietf.org/html/rfc3986). It offers comprehensive support for parsing, normalizing, and
