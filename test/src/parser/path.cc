@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
-#include "parser_engine.h"
 
-TEST(StaticParseHelpers, ParsePath)
-{
+TEST(StaticParseHelpers, ParsePath) {
     // constexpr size_t cursor = 0;
 
     // Test cases for path-abempty

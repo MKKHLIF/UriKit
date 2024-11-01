@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <uri/uri.h>
-#include "parser_engine.h"
 
 TEST(StaticParseHelpers, ParseRegisteredHost) {
     // constexpr size_t cursor = 0;

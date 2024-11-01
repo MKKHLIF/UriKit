@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include "parser_engine.h"
-
+#include <uri/uri.h>
 
 TEST(StaticParseHelpers, ParseAuthorityWithPath) {
     const Uri uri;

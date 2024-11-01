@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "string_extensions.h"
-#include "syntax_validator.h"
+#include "../extensions/str.h"
+#include "../validation/syntax_validator.h"
 #include <uri/uri.h>
 
 class Parser::Imp {

@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
-#include "parser_engine.h"
 
-TEST(StaticParseHelpers, ParseUserInfo)
-{
+TEST(StaticParseHelpers, ParseUserInfo) {
 	// constexpr size_t cursor = 0;
 	//
 	// auto result = Parser::parseUserInfo("user:password@www.example.com:8080", cursor);

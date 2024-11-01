@@ -1,9 +1,6 @@
-
 #include <gtest/gtest.h>
-#include "parser_engine.h"
 
-TEST(StaticParseHelpers, ParsePortRegisteredHost)
-{
+TEST(StaticParseHelpers, ParsePortRegisteredHost) {
     // size_t cursor = 0;
     // const std::string default_port = "80";
     //
@@ -24,8 +21,7 @@ TEST(StaticParseHelpers, ParsePortRegisteredHost)
     // ASSERT_EQ(result.content, default_port);
 }
 
-TEST(StaticParseHelpers, ParsePortIPv4Host)
-{
+TEST(StaticParseHelpers, ParsePortIPv4Host) {
     // size_t cursor = 0;
     //
     // const std::string default_port = "80";
@@ -47,8 +43,7 @@ TEST(StaticParseHelpers, ParsePortIPv4Host)
     // ASSERT_EQ(result.content, default_port);
 }
 
-TEST(StaticParseHelpers, ParsePortIPv6Host)
-{
+TEST(StaticParseHelpers, ParsePortIPv6Host) {
     // size_t cursor = 0;
     //
     // const std::string default_port = "80";
