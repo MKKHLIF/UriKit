@@ -3,153 +3,186 @@
 #include "../ipv4/ipv4.h"
 #include "../characters/character_sets.h"
 
-bool IPv6Validator::isValid(const std::string &address) {
-    auto state = ValidationState::NO_GROUPS_YET;
+bool IPv6Validator::isValid(const std::string &address)  {
+    ValidationContext ctx;
 
-    size_t num_groups = 0;
-    size_t num_digits = 0;
-    bool double_colon_encountered = false;
-    size_t potential_ipv4_address_start = 0;
-    size_t position = 0;
-    bool ipv4_address_encountered = false;
-    for (const auto c: address) {
-        switch (state) {
-            case ValidationState::NO_GROUPS_YET: {
-                if (c == ':') {
-                    state = ValidationState::COLON_BUT_NO_GROUPS_YET;
-                } else if (CharacterSets::DIGIT.contains(c)) {
-                    potential_ipv4_address_start = position;
-                    num_digits = 1;
-                    state = ValidationState::IN_GROUP_COULD_BE_IPV4;
-                } else if (CharacterSets::HEXDIG.contains(c)) {
-                    num_digits = 1;
-                    state = ValidationState::IN_GROUP_NOT_IPV4;
-                } else {
-                    return false;
-                }
-            }
+    for (const char c : address) {
+        bool valid = false;
+        
+        switch (ctx.state) {
+            case ValidationState::NoGroupsYet:
+                valid = handleNoGroupsYet(c, ctx);
             break;
-
-            case ValidationState::COLON_BUT_NO_GROUPS_YET: {
-                if (c == ':') {
-                    double_colon_encountered = true;
-                    state = ValidationState::AFTER_DOUBLE_COLON;
-                } else {
-                    return false;
-                }
-            }
+            case ValidationState::ColonButNoGroupsYet:
+                valid = handleColonButNoGroupsYet(c, ctx);
             break;
-
-            case ValidationState::AFTER_DOUBLE_COLON: {
-                if (CharacterSets::DIGIT.contains(c)) {
-                    potential_ipv4_address_start = position;
-                    if (++num_digits > 4) {
-                        return false;
-                    }
-                    state = ValidationState::IN_GROUP_COULD_BE_IPV4;
-                } else if (CharacterSets::HEXDIG.contains(c)) {
-                    if (++num_digits > 4) {
-                        return false;
-                    }
-                    state = ValidationState::IN_GROUP_NOT_IPV4;
-                } else {
-                    return false;
-                }
-            }
+            case ValidationState::AfterDoubleColon:
+                valid = handleAfterDoubleColon(c, ctx);
             break;
-
-            case ValidationState::IN_GROUP_NOT_IPV4: {
-                if (c == ':') {
-                    num_digits = 0;
-                    ++num_groups;
-                    state = ValidationState::COLON_AFTER_GROUP;
-                } else if (CharacterSets::HEXDIG.contains(c)) {
-                    if (++num_digits > 4) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            }
+            case ValidationState::InGroupNotIPv4:
+                valid = handleInGroupNotIPv4(c, ctx);
             break;
-
-            case ValidationState::IN_GROUP_COULD_BE_IPV4: {
-                if (c == ':') {
-                    num_digits = 0;
-                    ++num_groups;
-                    state = ValidationState::COLON_AFTER_GROUP;
-                } else if (c == '.') {
-                    ipv4_address_encountered = true;
-                    break;
-                } else if (CharacterSets::DIGIT.contains(c)) {
-                    if (++num_digits > 4) {
-                        return false;
-                    }
-                } else if (CharacterSets::HEXDIG.contains(c)) {
-                    if (++num_digits > 4) {
-                        return false;
-                    }
-                    state = ValidationState::IN_GROUP_NOT_IPV4;
-                } else {
-                    return false;
-                }
-            }
+            case ValidationState::InGroupCouldBeIPv4:
+                valid = handleInGroupCouldBeIPv4(c, ctx);
             break;
-
-            case ValidationState::COLON_AFTER_GROUP: {
-                if (c == ':') {
-                    if (double_colon_encountered) {
-                        return false;
-                    } else {
-                        double_colon_encountered = true;
-                        state = ValidationState::AFTER_DOUBLE_COLON;
-                    }
-                } else if (CharacterSets::DIGIT.contains(c)) {
-                    potential_ipv4_address_start = position;
-                    ++num_digits;
-                    state = ValidationState::IN_GROUP_COULD_BE_IPV4;
-                } else if (CharacterSets::HEXDIG.contains(c)) {
-                    ++num_digits;
-                    state = ValidationState::IN_GROUP_NOT_IPV4;
-                } else {
-                    return false;
-                }
-            }
+            case ValidationState::ColonAfterGroup:
+                valid = handleColonAfterGroup(c, ctx);
             break;
         }
-        if (ipv4_address_encountered) {
-            break;
-        }
-        ++position;
+
+        if (!valid) return false;
+
+        if (ctx.ipv4Found) break;
+        ctx.position++;
     }
-    if (
-        (state == ValidationState::IN_GROUP_NOT_IPV4)
-        || (state == ValidationState::IN_GROUP_COULD_BE_IPV4)
-    ) {
-        // count trailing group
-        ++num_groups;
-    }
-    if (
-        (position == address.length())
-        && (
-            (state == ValidationState::COLON_BUT_NO_GROUPS_YET)
-            || (state == ValidationState::COLON_AFTER_GROUP)
-        )
-    ) {
-        // trailing single colon
-        return false;
-    }
-    if (ipv4_address_encountered) {
-        if (!IPv4Validator::isValid(address.substr(potential_ipv4_address_start))) {
-            return false;
-        }
-        num_groups += 2;
-    }
-    if (double_colon_encountered) {
-        // A double colon matches one or more groups (of 0).
-        return (num_groups <= 7);
-    } else {
-        return (num_groups == 8);
-    }
+
+    return finalizeValidation(ctx, address);
 }
 
+bool IPv6Validator::handleNoGroupsYet(const char c, ValidationContext& ctx) {
+    if (c == ':') {
+        ctx.state = ValidationState::ColonButNoGroupsYet;
+        return true;
+    }
+
+    if (CharacterSets::DIGIT.contains(c)) {
+        ctx.ipv4Start = ctx.position;
+        ctx.numDigits = 1;
+        ctx.state = ValidationState::InGroupCouldBeIPv4;
+        return true;
+    }
+
+    if (CharacterSets::HEXDIG.contains(c)) {
+        ctx.numDigits = 1;
+        ctx.state = ValidationState::InGroupNotIPv4;
+        return true;
+    }
+
+    return false;
+}
+
+bool IPv6Validator::handleColonButNoGroupsYet(const char c, ValidationContext& ctx) {
+    if (c == ':') {
+        ctx.doubleColonFound = true;
+        ctx.state = ValidationState::AfterDoubleColon;
+        return true;
+    }
+    return false;
+}
+
+bool IPv6Validator::handleAfterDoubleColon(char c, ValidationContext& ctx) {
+    if (CharacterSets::DIGIT.contains(c)) {
+        ctx.ipv4Start = ctx.position;
+        ctx.numDigits++;
+        ctx.state = ValidationState::InGroupCouldBeIPv4;
+        return ctx.numDigits <= 4;
+    }
+
+    if (CharacterSets::HEXDIG.contains(c)) {
+        ctx.numDigits++;
+        ctx.state = ValidationState::InGroupNotIPv4;
+        return ctx.numDigits <= 4;
+    }
+
+    return false;
+}
+
+bool IPv6Validator::handleInGroupNotIPv4(const char c, ValidationContext& ctx) {
+    if (c == ':') {
+        ctx.numDigits = 0;
+        ctx.numGroups++;
+        ctx.state = ValidationState::ColonAfterGroup;
+        return true;
+    }
+
+    if (CharacterSets::HEXDIG.contains(c)) {
+        ctx.numDigits++;
+        return ctx.numDigits <= 4;
+    }
+
+    return false;
+}
+
+bool IPv6Validator::handleInGroupCouldBeIPv4(const char c, ValidationContext& ctx) {
+    if (c == ':') {
+        ctx.numDigits = 0;
+        ctx.numGroups++;
+        ctx.state = ValidationState::ColonAfterGroup;
+        return true;
+    }
+
+    if (c == '.') {
+        ctx.ipv4Found = true;
+        return true;
+    }
+
+    if (CharacterSets::DIGIT.contains(c)) {
+        ctx.numDigits++;
+        return ctx.numDigits <= 4;
+    }
+
+    if (CharacterSets::HEXDIG.contains(c)) {
+        ctx.numDigits++;
+        ctx.state = ValidationState::InGroupNotIPv4;
+        return ctx.numDigits <= 4;
+    }
+
+    return false;
+}
+
+bool IPv6Validator::handleColonAfterGroup(const char c, ValidationContext& ctx) {
+    if (c == ':') {
+        if (ctx.doubleColonFound) {
+            return false;
+        }
+        ctx.doubleColonFound = true;
+        ctx.state = ValidationState::AfterDoubleColon;
+        return true;
+    }
+    
+    if (CharacterSets::DIGIT.contains(c)) {
+        ctx.ipv4Start = ctx.position;
+        ctx.numDigits = 1;
+        ctx.state = ValidationState::InGroupCouldBeIPv4;
+        return true;
+    }
+    
+    if (CharacterSets::HEXDIG.contains(c)) {
+        ctx.numDigits = 1;
+        ctx.state = ValidationState::InGroupNotIPv4;
+        return true;
+    }
+    
+    return false;
+}
+
+bool IPv6Validator::finalizeValidation(const ValidationContext& ctx, const std::string& address) {
+    // Handle trailing single colon
+    if (ctx.position == address.length() &&
+        (ctx.state == ValidationState::ColonButNoGroupsYet || 
+         ctx.state == ValidationState::ColonAfterGroup)) {
+        return false;
+    }
+
+    size_t finalGroups = ctx.numGroups;
+
+    // Count the last group if we were in the middle of one
+    if (ctx.state == ValidationState::InGroupNotIPv4 || 
+        ctx.state == ValidationState::InGroupCouldBeIPv4) {
+        finalGroups++;
+    }
+
+    // Handle IPv4 address if found
+    if (ctx.ipv4Found) {
+        if (!IPv4Validator::isValid(address.substr(ctx.ipv4Start))) {
+            return false;
+        }
+        finalGroups += 2;
+    }
+
+    // Validate total number of groups
+    if (ctx.doubleColonFound) {
+        return finalGroups <= 7;
+    }
+    return finalGroups == 8;
+}
