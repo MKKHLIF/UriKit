@@ -1,7 +1,7 @@
 #include "ipv6.h"
 #include <regex>
 #include "../ipv4/ipv4.h"
-#include "../characters/character_sets.h"
+#include "../characters/sets.h"
 
 bool IPv6Validator::isValid(const std::string &address)  {
     ValidationContext ctx;
