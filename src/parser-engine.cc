@@ -84,33 +84,7 @@ bool Parser::Imp::parse(const std::string &str, const Uri *obj) {
 }
 
 ParseResult<std::string> Parser::Imp::parseScheme(const std::string &str) {
-    // "https://www.google.com/search?q=uri"
-    // "file:///C:/Users/Example/Documents/Projects/2024/Report.pdf"
-    // "mailto:user@example.com"
-    // "foo/bar"
 
-    auto authority_or_path_start = str.find('/');
-
-    if (authority_or_path_start == std::string::npos) {
-        authority_or_path_start = str.length();
-    }
-
-    const auto scheme_end = str.substr(cursor, authority_or_path_start).find(':');
-
-    if (scheme_end == std::string::npos) return {false, ""};
-
-
-    std::string scheme = str.substr(cursor, scheme_end);
-
-    scheme = StringExtensions::lowercase(scheme);
-
-    if (!SyntaxValidator::validateScheme(scheme)) return {true, ""};
-
-    ParseResult result = {false, scheme};
-
-    cursor = scheme_end + 1;
-
-    return result;
 }
 
 bool Parser::Imp::parseAuthority(const std::string &authority, const Uri *obj) {
