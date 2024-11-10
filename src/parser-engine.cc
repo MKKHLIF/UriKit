@@ -2,7 +2,7 @@
 
 #include "parser-engine.h"
 #include "str.h"
-#include "syntax_validator.h"
+#include "val-scheme.h"
 
 class Parser::Imp {
 public:
