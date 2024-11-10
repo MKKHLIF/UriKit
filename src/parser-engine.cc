@@ -99,6 +99,6 @@ Parser::Parser(Parser &&) noexcept {
 // {
 // }
 
-bool Parser::parse(const std::string &uri, const Uri *obj) const {
+bool Parser::parse(std::string &uri, const Uri *obj) const {
     return imp->parse(uri, obj);
 }
