@@ -1,6 +1,6 @@
-#include "ipv6.h"
+#include "val-ipv6.h"
 #include <regex>
-#include "ipv4.h"
+#include "val-ipv4.h"
 #include "sets.h"
 
 bool IPv6Validator::isValid(const std::string &address)  {
