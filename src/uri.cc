@@ -84,7 +84,8 @@ bool Uri::operator!=(const Uri &other) const {
 
 bool Uri::parse(const std::string &str) const {
     const Parser parser;
-    return parser.parse(str, this);
+    std::string tmp = str;
+    return parser.parse(tmp, this);
 }
 
 std::string Uri::getScheme() const {
