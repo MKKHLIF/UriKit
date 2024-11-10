@@ -1,8 +1,13 @@
 #include "authority-parser.h"
 
 bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &components) {
-    // Vector to hold userinfo, host, port
-    components.clear();
+    // Make sure components has a size of 3, pre-allocate space
+    components.resize(3);
+
+    // Clear the vector first to ensure we're starting with fresh values
+    components[0].clear(); // userinfo
+    components[1].clear(); // host
+    components[2].clear(); // port
 
     if (authority.empty()) return true;
 
@@ -14,9 +19,8 @@ bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &co
         // No user info, the entire authority is host and port
         host_port = authority;
     } else {
-        // Extract user info and store it in the vector
-        std::string user_info = authority.substr(0, user_info_delimiter);
-        components.push_back(user_info); // Add userinfo to vector
+        // Extract user info and store it in components[0]
+        components[0] = authority.substr(0, user_info_delimiter);
         host_port = authority.substr(user_info_delimiter + 1);
     }
 
@@ -25,8 +29,8 @@ bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &co
 
     if (port_delimiter == std::string::npos) {
         // No port specified, just the host
-        components.push_back(host_port); // Add host to vector
-        components.push_back(""); // No port, so empty string for port
+        components[1] = host_port; // Add host to components[1]
+        components[2] = ""; // No port, so empty string for port
     } else {
         // Check if there is "]", which would indicate it's part of the host
         bool is_ipv6_host = false;
@@ -39,17 +43,15 @@ bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &co
 
         if (is_ipv6_host) {
             // The ":" is part of the host, so no port present
-            components.push_back(host_port); // Add host to vector
-            components.push_back(""); // No port
+            components[1] = host_port; // Add host to components[1]
+            components[2] = ""; // No port
         } else {
             // Extract the host part and the port part
-            std::string host = host_port.substr(0, port_delimiter);
-            std::string port = host_port.substr(port_delimiter + 1);
-
-            components.push_back(host); // Add host to vector
-            components.push_back(port); // Add port to vector
+            components[1] = host_port.substr(0, port_delimiter); // host
+            components[2] = host_port.substr(port_delimiter + 1); // port
         }
     }
 
     return true;
 }
+

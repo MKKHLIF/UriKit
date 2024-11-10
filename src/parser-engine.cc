@@ -1,6 +1,7 @@
 #include <uri/uri.h>
 #include "parser-engine.h"
 
+#include "authority-parser.h"
 #include "path-parser.h"
 #include "scheme-parser.h"
 
@@ -37,10 +38,6 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
 
     if (!content.empty()) {
         obj->setScheme(content);
-        // skip // if exists
-        if (uri.size() >= 2 && uri[0] == '/' && uri[1] == '/') {
-            uri = uri.substr(2);
-        }
 
         auto path_end = uri.find_first_of("?#");
         if (path_end == std::string::npos) path_end = uri.length();
@@ -60,19 +57,28 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
             authority.clear();
         }
 
-        status = parseAuthority(authority, obj);
+        std::vector<std::string> components(3);
+        status = AuthorityParser::parse(authority, components);
         if (status == false) {
             obj->reset();
             return false;
         }
-
-        const auto parse_path_result = parsePath(path);
-        if (parse_path_result.error) {
+        if (!components[0].empty()) {
+            obj->setUserInfo(components[0]);
+        }
+        if (!components[1].empty()) {
+            obj->setHost(components[1]);
+        }
+        if (!components[2].empty()) {
+            obj->setPort(std::stoi(components[2]));
+        }
+        std::vector<std::string> path_components;
+        status = PathParser::parse(path, path_components);
+        if (status == false) {
             obj->reset();
             return false;
         }
-        obj->clearPath();
-        obj->setPath(parse_path_result.content);
+        obj->setPath(path_components);
     }
 
 

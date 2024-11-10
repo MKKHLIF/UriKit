@@ -30,6 +30,10 @@ bool SchemeParser::parse(std::string &uri, std::string &scheme) {
     }
     //remove scheme from uri
     uri = uri.substr(scheme_end + 1);
+    // skip // if exists
+    if (uri.size() >= 2 && uri[0] == '/' && uri[1] == '/') {
+        uri = uri.substr(2);
+    }
 
     return true;
 }
