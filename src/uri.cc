@@ -1,7 +1,7 @@
 #include <string>
 #include <uri/uri.h>
 #include <memory>
-#include "parser_engine.h"
+#include "parser-engine.h"
 #include "gen.h"
 
 struct Uri::UriImpl {
@@ -83,8 +83,10 @@ bool Uri::operator!=(const Uri &other) const {
 }
 
 bool Uri::parse(const std::string &str) const {
+    this->reset();
     const Parser parser;
-    return parser.parse(str, this);
+    std::string tmp = str;
+    return parser.parse(tmp, this);
 }
 
 std::string Uri::getScheme() const {

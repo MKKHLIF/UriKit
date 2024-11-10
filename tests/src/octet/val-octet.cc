@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "octet.h"
+#include "val-octet.h"
 
 TEST(OctetValidatorTest, ValidOctets) {
     EXPECT_TRUE(OctetValidator::isValidOctet("0"));
