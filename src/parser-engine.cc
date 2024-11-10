@@ -1,45 +1,50 @@
 #include <uri/uri.h>
-
 #include "parser-engine.h"
-#include "str.h"
-#include "val-scheme.h"
+
+#include "path-parser.h"
+#include "scheme-parser.h"
 
 class Parser::Imp {
 public:
-    Imp(): cursor(0) {
-    };
+    Imp() = default;
 
     ~Imp() = default;
 
-    bool parse(const std::string &str, const Uri *obj);
-
-private:
-    size_t cursor;
-
-    ParseResult<std::string> parseScheme(const std::string &str);
-
-    [[nodiscard]] static bool parseAuthority(const std::string &authority, const Uri *obj);
-
-    [[nodiscard]] static ParseResult<std::vector<std::string> > parsePath(std::string path);
+    static bool parse(std::string &uri, const Uri *obj);
 };
 
-bool Parser::Imp::parse(const std::string &str, const Uri *obj) {
-    auto result = parseScheme(str);
-    if (result.error) {
+bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
+    std::string content;
+    bool status = SchemeParser::parse(uri, content);
+
+    // failed to parse scheme
+    if (status == false) {
         obj->reset();
         return false;
     }
 
-    if (!result.content.empty()) {
-        obj->setScheme(result.content);
+    // if scheme is empty, then it is a relative reference
+    if (content.empty()) {
+        obj->reset();
+        std::vector<std::string> path;
+        status = PathParser::parse(uri, path);
+        if (status == false) {
+            obj->reset();
+            return false;
+        }
+        obj->setPath(path);
+    }
+
+    if (!content.empty()) {
+        obj->setScheme(content);
         // skip // if exists
-        if (cursor + 1 < str.length() && str[cursor] == '/' && str[cursor + 1] == '/') {
-            cursor += 2;
+        if (uri.size() >= 2 && uri[0] == '/' && uri[1] == '/') {
+            uri = uri.substr(2);
         }
 
-        auto path_end = str.find_first_of("?#");
-        if (path_end == std::string::npos) path_end = str.length();
-        const auto authority_and_path = str.substr(cursor, path_end - cursor);
+        auto path_end = uri.find_first_of("?#");
+        if (path_end == std::string::npos) path_end = uri.length();
+        const auto authority_and_path = uri.substr(0, path_end);
 
         // split authority from path
         auto authority_end = authority_and_path.find('/');
@@ -55,8 +60,8 @@ bool Parser::Imp::parse(const std::string &str, const Uri *obj) {
             authority.clear();
         }
 
-        const auto error = parseAuthority(authority, obj);
-        if (error) {
+        status = parseAuthority(authority, obj);
+        if (status == false) {
             obj->reset();
             return false;
         }
@@ -69,22 +74,9 @@ bool Parser::Imp::parse(const std::string &str, const Uri *obj) {
         obj->clearPath();
         obj->setPath(parse_path_result.content);
     }
-    // relative uri
-    else {
-        obj->reset();
-        const auto parse_path_result = parsePath(str);
-        if (parse_path_result.error) {
-            obj->reset();
-            return false;
-        }
-        obj->setPath(parse_path_result.content);
-    }
+
 
     return true;
-}
-
-ParseResult<std::string> Parser::Imp::parseScheme(const std::string &str) {
-
 }
 
 bool Parser::Imp::parseAuthority(const std::string &authority, const Uri *obj) {
