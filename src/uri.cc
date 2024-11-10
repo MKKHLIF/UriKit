@@ -1,8 +1,8 @@
 #include <string>
 #include <uri/uri.h>
 #include <memory>
-#include "parser/parser_engine.h"
-#include "gen/gen.h"
+#include "parser_engine.h"
+#include "gen.h"
 
 struct Uri::UriImpl {
     std::string scheme_;

@@ -1,7 +1,6 @@
 #include "ipv4.h"
-
-#include "../characters/sets.h"
-#include "../octet/octet.h"
+#include "sets.h"
+#include "octet.h"
 
 bool IPv4Validator::isValid(const std::string &address) {
     if (address.empty()) {

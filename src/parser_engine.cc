@@ -1,8 +1,8 @@
-#include "parser_engine.h"
-
-#include "../extensions/str.h"
-#include "../validation/syntax_validator.h"
 #include <uri/uri.h>
+
+#include "parser_engine.h"
+#include "str.h"
+#include "syntax_validator.h"
 
 class Parser::Imp {
 public:

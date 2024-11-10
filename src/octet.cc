@@ -1,7 +1,7 @@
 #include "octet.h"
 
-#include "../characters/character.h"
-#include "../characters/sets.h"
+#include "character.h"
+#include "sets.h"
 
 bool OctetValidator::isValidOctet(const std::string &octet) {
     if (octet.empty()) {
