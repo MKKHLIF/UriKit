@@ -9,11 +9,12 @@ endif ()
 message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS "C++ Compiler Version: ${CMAKE_CXX_COMPILER_VERSION}")
 
-project("uri")
+project("uri_lib")
 
 enable_testing()
 
-add_subdirectory("uri")
-add_subdirectory("test")
+add_subdirectory("src")
+add_subdirectory("tests")
+add_subdirectory("examples")
 
 

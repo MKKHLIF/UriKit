@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <ipv6/ipv6.h>
+#include "ipv6.h"
 
 class IPv6ValidatorTest : public ::testing::Test {
 };

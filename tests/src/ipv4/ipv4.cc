@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <ipv4/ipv4.h>
+#include "ipv4.h"
 
 TEST(IPv4ValidatorTest, ValidAddresses) {
     EXPECT_TRUE(IPv4Validator::isValid("192.168.1.1"));

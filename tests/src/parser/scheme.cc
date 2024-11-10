@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-
 #include <uri/uri.h>
+
 TEST(StaticParseHelpers, ParseScheme) {
     const Uri uri;
     bool success = uri.parse("https://www.google.com/search?q=uri");

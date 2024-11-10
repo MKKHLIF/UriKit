@@ -1,7 +1,7 @@
 #include "syntax_validator.h"
 #include <string>
 
-#include "../characters/sets.h"
+#include "sets.h"
 
 
 bool SyntaxValidator::validateScheme(const std::string &scheme) {
