@@ -119,35 +119,6 @@ bool Parser::Imp::parseAuthority(const std::string &authority, const Uri *obj) {
     return false;
 }
 
-ParseResult<std::vector<std::string> > Parser::Imp::parsePath(std::string path) {
-    std::vector<std::string> result;
-    if (path == "/") {
-        // Special case of a path that is empty but needs a single
-        // empty-string element to indicate that it is absolute.
-        result.push_back("");
-    } else if (!path.empty()) {
-        for (;;) {
-            auto path_delimiter = path.find('/');
-            if (path_delimiter == std::string::npos) {
-                result.push_back(path);
-                break;
-            }
-            result.emplace_back(
-                path.begin(),
-                path.begin() + path_delimiter
-            );
-            path = path.substr(path_delimiter + 1);
-        }
-        // for (auto& segment: path) {
-        //     if (!DecodeElement(segment, PCHAR_NOT_PCT_ENCODED)) {
-        //         return {true, result};
-        //     }
-        // }
-    }
-
-    return {false, result};
-}
-
 Parser::Parser(): imp(std::make_unique<Imp>()) {
 }
 
