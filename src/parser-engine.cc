@@ -79,46 +79,6 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
     return true;
 }
 
-bool Parser::Imp::parseAuthority(const std::string &authority, const Uri *obj) {
-    //accepts empty authority
-    if (authority.empty()) return false;
-
-    // Check if there is a UserInfo, and if so, extract it.
-    const auto user_info_delimiter = authority.find('@');
-    std::string host_port;
-    obj->clearUserInfo();
-    if (user_info_delimiter == std::string::npos) {
-        host_port = authority;
-    } else {
-        auto user_info = authority.substr(0, user_info_delimiter);
-        obj->setUserInfo(user_info);
-        host_port = authority.substr(user_info_delimiter + 1);
-    }
-
-    // Next, parsing host and port
-
-    obj->clearHost();
-    obj->clearPort();
-    auto port_delimiter = host_port.find_last_of(':');
-    if (port_delimiter == std::string::npos) {
-        obj->setHost(host_port);
-        return false;
-    }
-    // if found "]" then the : belongs to the host
-    for (size_t i = port_delimiter; i < host_port.length(); i++) {
-        if (host_port[i] == ']') {
-            obj->setHost(host_port);
-            return false;
-        }
-    }
-    obj->setHost(host_port.substr(0, port_delimiter));
-    const std::string port_string = host_port.substr(port_delimiter + 1);
-
-    obj->setPort(std::stoi(port_string));
-
-    return false;
-}
-
 Parser::Parser(): imp(std::make_unique<Imp>()) {
 }
 
