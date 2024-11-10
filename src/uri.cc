@@ -83,6 +83,7 @@ bool Uri::operator!=(const Uri &other) const {
 }
 
 bool Uri::parse(const std::string &str) const {
+    this->reset();
     const Parser parser;
     std::string tmp = str;
     return parser.parse(tmp, this);
