@@ -4,6 +4,5 @@
 
 class AuthorityParser {
 public:
-    [[nodiscard]] static bool parse(const std::string &authority, std::vector<std::string> authority_parts);
-
+    [[nodiscard]] static bool parse(std::string &authority, std::vector<std::string> &components);
 };
