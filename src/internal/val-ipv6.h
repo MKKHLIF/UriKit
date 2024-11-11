@@ -14,7 +14,6 @@ private:
         InGroupCouldBeIPv4,
         ColonAfterGroup
     };
-
     struct ValidationContext {
         ValidationState state = ValidationState::NoGroupsYet;
         size_t numGroups = 0;
@@ -25,19 +24,14 @@ private:
         bool ipv4Found = false;
     };
 
-    static bool handleNoGroupsYet(char c, ValidationContext &ctx);
+    static bool handleNoGroupsYet(char c, ValidationContext& ctx);
+    static bool handleColonButNoGroupsYet(char c, ValidationContext& ctx);
+    static bool handleAfterDoubleColon(char c, ValidationContext& ctx);
+    static bool handleInGroupNotIPv4(char c, ValidationContext& ctx);
+    static bool handleInGroupCouldBeIPv4(char c, ValidationContext& ctx);
+    static bool handleColonAfterGroup(char c, ValidationContext& ctx);
+    static bool finalizeValidation(const ValidationContext& ctx, const std::string& address);
 
-    static bool handleColonButNoGroupsYet(char c, ValidationContext &ctx);
-
-    static bool handleAfterDoubleColon(char c, ValidationContext &ctx);
-
-    static bool handleInGroupNotIPv4(char c, ValidationContext &ctx);
-
-    static bool handleInGroupCouldBeIPv4(char c, ValidationContext &ctx);
-
-    static bool handleColonAfterGroup(char c, ValidationContext &ctx);
-
-    static bool finalizeValidation(const ValidationContext &ctx, const std::string &address);
 };
 
 
