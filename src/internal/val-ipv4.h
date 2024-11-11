@@ -5,7 +5,7 @@
 
 class IPv4Validator {
 public:
-    static bool isValid(const std::string &address);
+    [[nodiscard]] static bool isValid(const std::string &address);
 
 private:
     static constexpr size_t EXPECTED_GROUPS = 4;

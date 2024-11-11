@@ -3,6 +3,6 @@
 
 class OctetValidator {
 public:
-    static bool isValidOctet(const std::string &octet);
+    [[nodiscard]] static bool isValidOctet(const std::string &octet);
 };
 
