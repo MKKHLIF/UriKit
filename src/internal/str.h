@@ -3,5 +3,5 @@
 
 class StringExtensions {
 public:
-	static std::string lowercase(const std::string& str);
+	static std::string toLower(const std::string &str);
 };
