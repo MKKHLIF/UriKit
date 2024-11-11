@@ -159,7 +159,7 @@ bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &co
         host = StringExtensions::toLower(host);
     }
 
-    if (const bool status = PortValidator::isValid(port); !status) {
+    if (!port.empty() && !PortValidator::isValid(port)) {
         return false;
     }
 
