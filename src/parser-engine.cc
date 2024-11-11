@@ -12,6 +12,10 @@ public:
     ~Imp() = default;
 
     static bool parse(std::string &uri, const Uri *obj);
+
+private:
+    static void splitPathAndAuthority(const Uri *obj, const std::string &uri, std::string &authority,
+                                      std::string &path);
 };
 
 bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
@@ -39,39 +43,27 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
 
     obj->setScheme(content);
 
-    auto path_end = uri.find_first_of("?#");
-    if (path_end == std::string::npos) path_end = uri.length();
-    const auto authority_and_path = uri.substr(0, path_end);
+    std::string authority;
+    std::string path;
 
-    // split authority from path
-    auto authority_end = authority_and_path.find('/');
-    if (authority_end == std::string::npos) {
-        authority_end = authority_and_path.length();
-    }
+    splitPathAndAuthority(obj, uri, authority, path);
 
-    auto authority = authority_and_path.substr(0, authority_end);
-    auto path = authority_and_path.substr(authority_end);
-
-    if (obj->getScheme() == "mailto") {
-        path = authority;
-        authority.clear();
-    }
-
-    std::vector<std::string> components(3);
-    status = AuthorityParser::parse(authority, components);
+    std::vector<std::string> authority_components(3);
+    status = AuthorityParser::parse(authority, authority_components);
     if (status == false) {
         obj->reset();
         return false;
     }
-    if (!components[0].empty()) {
-        obj->setUserInfo(components[0]);
+    if (!authority_components[0].empty()) {
+        obj->setUserInfo(authority_components[0]);
     }
-    if (!components[1].empty()) {
-        obj->setHost(components[1]);
+    if (!authority_components[1].empty()) {
+        obj->setHost(authority_components[1]);
     }
-    if (!components[2].empty()) {
-        obj->setPort(std::stoi(components[2]));
+    if (!authority_components[2].empty()) {
+        obj->setPort(std::stoi(authority_components[2]));
     }
+
     std::vector<std::string> path_components;
     status = PathParser::parse(path, path_components);
     if (status == false) {
@@ -82,6 +74,29 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
 
 
     return true;
+}
+
+void Parser::Imp::splitPathAndAuthority(const Uri *obj, const std::string &uri, std::string &authority,
+                                        std::string &path) {
+    auto path_end = uri.find_first_of("?#");
+    if (path_end == std::string::npos) path_end = uri.length();
+
+    const auto authority_and_path = uri.substr(0, path_end);
+
+    // split authority from path
+    auto authority_end = authority_and_path.find('/');
+    if (authority_end == std::string::npos) {
+        authority_end = authority_and_path.length();
+    }
+
+    authority = authority_and_path.substr(0, authority_end);
+    path = authority_and_path.substr(authority_end);
+
+    // Edge case for mailto
+    if (obj->getScheme() == "mailto") {
+        path = authority;
+        authority.clear();
+    }
 }
 
 Parser::Parser(): imp(std::make_unique<Imp>()) {

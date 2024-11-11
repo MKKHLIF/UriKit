@@ -1,17 +1,15 @@
 #include "authority-parser.h"
 
 bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &components) {
-    // Make sure components has a size of 3, pre-allocate space
     components.resize(3);
 
-    // Clear the vector first to ensure we're starting with fresh values
+
     components[0].clear(); // userinfo
     components[1].clear(); // host
     components[2].clear(); // port
 
     if (authority.empty()) return true;
 
-    // Check if there is a UserInfo, and if so, extract it
     const auto user_info_delimiter = authority.find('@');
     std::string host_port;
 
