@@ -34,6 +34,7 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
             return false;
         }
         obj->setPath(path);
+        return true;
     }
 
     if (!content.empty()) {
