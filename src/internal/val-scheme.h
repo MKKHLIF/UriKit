@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class SyntaxValidator {
+class SchemeValidator {
 public:
-	[[nodiscard]] static bool validateScheme(const std::string &scheme);
+	[[nodiscard]] static bool isValid(const std::string &scheme);
 };

@@ -4,7 +4,7 @@
 #include "sets.h"
 
 
-bool SyntaxValidator::validateScheme(const std::string &scheme) {
+bool SchemeValidator::isValid(const std::string &scheme) {
     if (scheme.empty()) return false;
 
     if (!CharacterSets::ALPHA.contains(scheme[0])) return false;
