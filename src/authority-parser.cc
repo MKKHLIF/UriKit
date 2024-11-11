@@ -1,54 +1,170 @@
 #include "authority-parser.h"
 
+#include "sets.h"
+#include "str.h"
+#include "val-ipv6.h"
+#include "val-port.h"
+
 bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &components) {
     components.resize(3);
 
+    // user:password@www.example.com:8080
+    // www.example.com:8080
+    // www.example.com
+    // [2001:db8::1]:8080
+    // [2001:db8::1]
 
     components[0].clear(); // userinfo
     components[1].clear(); // host
     components[2].clear(); // port
 
-    if (authority.empty()) return true;
+    // if (authority.empty()) return true;
 
     const auto user_info_delimiter = authority.find('@');
-    std::string host_port;
+    std::string host_and_port;
 
     if (user_info_delimiter == std::string::npos) {
-        // No user info, the entire authority is host and port
-        host_port = authority;
+        host_and_port = authority;
     } else {
         // Extract user info and store it in components[0]
-        components[0] = authority.substr(0, user_info_delimiter);
-        host_port = authority.substr(user_info_delimiter + 1);
+        const std::string user_info = authority.substr(0, user_info_delimiter);
+
+        // if (!DecodeElement(user_info, USER_INFO_NOT_PCT_ENCODED)) {
+        //     return false;
+        // }
+
+        components[0] = user_info;
+
+        host_and_port = authority.substr(user_info_delimiter + 1);
     }
 
-    // Now parse host and port
-    auto port_delimiter = host_port.find_last_of(':');
+    std::string port;
+    std::string host;
+    bool host_is_reg_name = false;
+    auto state = HostParsingState::FIRST_CHARACTER;
 
-    if (port_delimiter == std::string::npos) {
-        // No port specified, just the host
-        components[1] = host_port; // Add host to components[1]
-        components[2] = ""; // No port, so empty string for port
-    } else {
-        // Check if there is "]", which would indicate it's part of the host
-        bool is_ipv6_host = false;
-        for (size_t i = port_delimiter; i < host_port.length(); i++) {
-            if (host_port[i] == ']') {
-                is_ipv6_host = true;
-                break;
+    // PercentEncodedCharacterDecoder pecDecoder;
+
+    for (const auto c: host_and_port) {
+        switch (state) {
+            // first character of the host
+            case HostParsingState::FIRST_CHARACTER: {
+                if (c == '[') {
+                    state = HostParsingState::IP_LITERAL;
+                    break;
+                }
+                host_is_reg_name = true;
+                state = HostParsingState::NOT_IP_LITERAL;
             }
-        }
 
-        if (is_ipv6_host) {
-            // The ":" is part of the host, so no port present
-            components[1] = host_port; // Add host to components[1]
-            components[2] = ""; // No port
-        } else {
-            // Extract the host part and the port part
-            components[1] = host_port.substr(0, port_delimiter); // host
-            components[2] = host_port.substr(port_delimiter + 1); // port
+            // not an IP literal
+            case HostParsingState::NOT_IP_LITERAL: {
+                if (c == '%') {
+                    // pecDecoder = PercentEncodedCharacterDecoder();
+                    state = HostParsingState::PERCENT_ENCODED_CHARACTER;
+                } else if (c == ':') {
+                    state = HostParsingState::PORT;
+                } else {
+                    if (CharacterSets::REG_NAME_NOT_PCT_ENCODED.contains(c)) {
+                        host.push_back(c);
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            break;
+
+            case HostParsingState::PERCENT_ENCODED_CHARACTER: {
+                // if (!pecDecoder.NextEncodedCharacter(c)) {
+                //     return false;
+                // }
+                // if (pecDecoder.Done()) {
+                //     state = HostParsingState::NOT_IP_LITERAL;
+                //     host.push_back((char) pecDecoder.GetDecodedCharacter());
+                // }
+            }
+            break;
+
+            case HostParsingState::IP_LITERAL: {
+                if (c == 'v') {
+                    host.push_back(c);
+                    state = HostParsingState::IPV_FUTURE_NUMBER;
+                    break;
+                }
+                state = HostParsingState::IPV6_ADDRESS;
+            }
+
+            case HostParsingState::IPV6_ADDRESS: {
+                if (c == ']') {
+                    if (!IPv6Validator::isValid(host)) {
+                        return false;
+                    }
+                    state = HostParsingState::GARBAGE_CHECK;
+                } else {
+                    host.push_back(c);
+                }
+            }
+            break;
+
+            case HostParsingState::IPV_FUTURE_NUMBER: {
+                if (c == '.') {
+                    state = HostParsingState::IPV_FUTURE_BODY;
+                } else if (!CharacterSets::HEXDIG.contains(c)) {
+                    return false;
+                }
+                host.push_back(c);
+            }
+            break;
+
+            case HostParsingState::IPV_FUTURE_BODY: {
+                if (c == ']') {
+                    state = HostParsingState::GARBAGE_CHECK;
+                } else if (!CharacterSets::IPV_FUTURE_LAST_PART.contains(c)) {
+                    return false;
+                } else {
+                    host.push_back(c);
+                }
+            }
+            break;
+
+            case HostParsingState::GARBAGE_CHECK: {
+                // illegal to have anything else, unless it's a colon,
+                // in which case it's a port delimiter
+                if (c == ':') {
+                    state = HostParsingState::PORT;
+                } else {
+                    return false;
+                }
+            }
+            break;
+
+            case HostParsingState::PORT: {
+                port.push_back(c);
+            }
+            break;
         }
     }
+
+    if (
+        (state != HostParsingState::FIRST_CHARACTER)
+        && (state != HostParsingState::NOT_IP_LITERAL)
+        && (state != HostParsingState::GARBAGE_CHECK)
+        && (state != HostParsingState::PORT)
+    ) {
+        // truncated or ended early
+        return false;
+    }
+
+    if (host_is_reg_name) {
+        host = StringExtensions::toLower(host);
+    }
+
+    if (const bool status = PortValidator::isValid(port); !status) {
+        return false;
+    }
+
+    components[1] = host;
+    components[2] = port;
 
     return true;
 }
