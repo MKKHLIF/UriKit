@@ -25,7 +25,7 @@ bool SchemeParser::parse(std::string &uri, std::string &scheme) {
 
     scheme = StringExtensions::toLower(scheme);
 
-    if (!SyntaxValidator::validateScheme(scheme)) {
+    if (!SchemeValidator::isValid(scheme)) {
         scheme.clear();
         return false;
     }
