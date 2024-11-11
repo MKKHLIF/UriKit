@@ -5,7 +5,7 @@
 #include "val-ipv6.h"
 #include "val-port.h"
 
-bool AuthorityParser::parse(std::string &authority, std::vector<std::string> &components) {
+bool AuthorityParser::parse(const std::string &authority, std::vector<std::string> &components) {
     components.resize(3);
 
     // user:password@www.example.com:8080
