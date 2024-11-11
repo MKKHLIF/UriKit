@@ -18,13 +18,14 @@ bool SchemeParser::parse(std::string &uri, std::string &scheme) {
 
     const auto scheme_end = uri.substr(0, authority_or_path_start).find(':');
 
+    // assuming a relative reference
     if (scheme_end == std::string::npos) return true;
 
     scheme = uri.substr(0, scheme_end);
 
     scheme = StringExtensions::toLower(scheme);
 
-    if (!SyntaxValidator::validateScheme(scheme)) {
+    if (!SchemeValidator::isValid(scheme)) {
         scheme.clear();
         return false;
     }

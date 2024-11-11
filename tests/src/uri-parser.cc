@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <uri/uri.h>
-//
+
 TEST(UriTests, parseNoScheme) {
     const Uri uri;
     const bool success = uri.parse("foo/bar");

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <uri/uri.h>
 
-TEST(StaticParseHelpers, ParseScheme) {
+TEST(UriParseScheme, ParseScheme) {
     const Uri uri;
     bool success = uri.parse("https://www.google.com/search?q=uri");
     ASSERT_TRUE(success);
@@ -21,28 +21,28 @@ TEST(StaticParseHelpers, ParseScheme) {
 }
 
 
-TEST(StaticParseHelpers, NoScheme) {
+TEST(UriParseScheme, NoScheme) {
     const Uri uri;
     const bool success = uri.parse("foo/bar");
     ASSERT_TRUE(success);
     ASSERT_EQ(uri.getScheme(), "");
 }
 
-TEST(StaticParseHelpers, EmptyUriScheme) {
+TEST(UriParseScheme, EmptyUriScheme) {
     const Uri uri;
     const bool success = uri.parse("");
     ASSERT_TRUE(success);
     ASSERT_EQ(uri.getScheme(), "");
 }
 
-TEST(StaticParseHelpers, SchemeCaseSensitive) {
+TEST(UriParseScheme, SchemeCaseSensitive) {
     const Uri uri;
     const bool success = uri.parse("hTTps://www.google.com/");
     ASSERT_TRUE(success);
     ASSERT_EQ(uri.getScheme(), "https");
 }
 
-TEST(StaticParseHelpers, SchemeNotAllowedCharacters) {
+TEST(UriParseScheme, SchemeNotAllowedCharacters) {
     const Uri uri;
     bool success = uri.parse("++hTTps://www.google.com/");
     ASSERT_FALSE(success);
