@@ -3,5 +3,5 @@
 
 class SyntaxValidator {
 public:
-	static bool validateScheme(const std::string &scheme);
+	[[nodiscard]] static bool validateScheme(const std::string &scheme);
 };

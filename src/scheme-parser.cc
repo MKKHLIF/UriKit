@@ -22,7 +22,7 @@ bool SchemeParser::parse(std::string &uri, std::string &scheme) {
 
     scheme = uri.substr(0, scheme_end);
 
-    scheme = StringExtensions::lowercase(scheme);
+    scheme = StringExtensions::toLower(scheme);
 
     if (!SyntaxValidator::validateScheme(scheme)) {
         scheme.clear();

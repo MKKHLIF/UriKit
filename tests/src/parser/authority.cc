@@ -89,7 +89,7 @@ TEST(StaticParseHelpers, ParseHostIPv6) {
     bool success = uri.parse("https://[2001:db8::1]:8080");
     ASSERT_TRUE(success);
     ASSERT_TRUE(uri.hasAuthority());
-    ASSERT_EQ(uri.getHost(), "[2001:db8::1]");
+    ASSERT_EQ(uri.getHost(), "2001:db8::1");
     ASSERT_TRUE(uri.hasPort());
     ASSERT_EQ(uri.getPort(), 8080);
 
@@ -97,14 +97,14 @@ TEST(StaticParseHelpers, ParseHostIPv6) {
     ASSERT_TRUE(success);
     ASSERT_TRUE(uri.hasAuthority());
     ASSERT_EQ(uri.getUserInfo(), "user:password");
-    ASSERT_EQ(uri.getHost(), "[2001:db8::1]");
+    ASSERT_EQ(uri.getHost(), "2001:db8::1");
     ASSERT_TRUE(uri.hasPort());
     ASSERT_EQ(uri.getPort(), 8080);
 
     success = uri.parse("https://[2001:db8::1]");
     ASSERT_TRUE(success);
     ASSERT_TRUE(uri.hasAuthority());
-    ASSERT_EQ(uri.getHost(), "[2001:db8::1]");
+    ASSERT_EQ(uri.getHost(), "2001:db8::1");
     ASSERT_FALSE(uri.hasPort());
 }
 
