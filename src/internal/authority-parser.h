@@ -5,7 +5,7 @@
 
 class AuthorityParser {
 public:
-    [[nodiscard]] static bool parse(std::string &authority, std::vector<std::string> &components);
+    [[nodiscard]] static bool parse(const std::string &authority, std::vector<std::string> &components);
 
 private:
     enum class HostParsingState {
