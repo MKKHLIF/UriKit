@@ -1,6 +1,7 @@
 #include "authority-parser.h"
 
 #include "decoder.h"
+#include "segment-decoder.h"
 #include "sets.h"
 #include "str.h"
 #include "val-ipv6.h"
@@ -28,11 +29,11 @@ bool AuthorityParser::parse(const std::string &authority, std::vector<std::strin
         host_and_port = authority;
     } else {
         // Extract user info and store it in components[0]
-        const std::string user_info = authority.substr(0, user_info_delimiter);
+        std::string user_info = authority.substr(0, user_info_delimiter);
 
-        // if (!DecodeElement(user_info, USER_INFO_NOT_PCT_ENCODED)) {
-        //     return false;
-        // }
+        if (!SegmentDecoder::decode(user_info, CharacterSets::USER_INFO_NOT_PCT_ENCODED)) {
+            return false;
+        }
 
         components[0] = user_info;
 
