@@ -1,5 +1,6 @@
 #include "authority-parser.h"
 
+#include "decoder.h"
 #include "sets.h"
 #include "str.h"
 #include "val-ipv6.h"
@@ -43,7 +44,7 @@ bool AuthorityParser::parse(const std::string &authority, std::vector<std::strin
     bool host_is_reg_name = false;
     auto state = HostParsingState::FIRST_CHARACTER;
 
-    // PercentEncodedCharacterDecoder pecDecoder;
+    PercentDecoder decoder;
 
     for (const auto c: host_and_port) {
         switch (state) {
@@ -60,7 +61,7 @@ bool AuthorityParser::parse(const std::string &authority, std::vector<std::strin
             // not an IP literal
             case HostParsingState::NOT_IP_LITERAL: {
                 if (c == '%') {
-                    // pecDecoder = PercentEncodedCharacterDecoder();
+                    decoder = PercentDecoder();
                     state = HostParsingState::PERCENT_ENCODED_CHARACTER;
                 } else if (c == ':') {
                     state = HostParsingState::PORT;
@@ -75,13 +76,13 @@ bool AuthorityParser::parse(const std::string &authority, std::vector<std::strin
             break;
 
             case HostParsingState::PERCENT_ENCODED_CHARACTER: {
-                // if (!pecDecoder.NextEncodedCharacter(c)) {
-                //     return false;
-                // }
-                // if (pecDecoder.Done()) {
-                //     state = HostParsingState::NOT_IP_LITERAL;
-                //     host.push_back((char) pecDecoder.GetDecodedCharacter());
-                // }
+                if (!decoder.next(c)) {
+                    return false;
+                }
+                if (decoder.done()) {
+                    state = HostParsingState::NOT_IP_LITERAL;
+                    host.push_back(decoder.getDecodedCharacter());
+                }
             }
             break;
 

@@ -16,6 +16,10 @@ const CharacterSet CharacterSets::HEXDIG{
     CharacterSet('A', 'F'),
     CharacterSet('a', 'f')
 };
+
+const CharacterSet CharacterSets::HEX_UPPER('A', 'F');
+const CharacterSet CharacterSets::HEX_LOWER('a', 'f');
+
 const CharacterSet CharacterSets::UNRESERVED{
     ALPHA,
     DIGIT,

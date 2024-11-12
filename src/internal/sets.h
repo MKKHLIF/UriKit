@@ -8,6 +8,9 @@ public:
     static const CharacterSet SCHEME_NOT_FIRST;
 
     static const CharacterSet HEXDIG;
+    static const CharacterSet HEX_UPPER;
+    static const CharacterSet HEX_LOWER;
+
     static const CharacterSet UNRESERVED;
     static const CharacterSet SUB_DELIMS;
 
