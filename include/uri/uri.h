@@ -82,6 +82,8 @@ public:
 
 	[[nodiscard]] bool isRelative() const;
 
+	[[nodiscard]] bool isPathAbsolute() const;
+
 	[[nodiscard]] bool containsRelativePath() const;
 
 	void normalizePath();

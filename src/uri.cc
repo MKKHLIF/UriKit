@@ -227,6 +227,10 @@ bool Uri::isRelative() const {
     return false;
 }
 
+bool Uri::isPathAbsolute() const {
+    return false;
+}
+
 bool Uri::containsRelativePath() const {
     return false;
 }
