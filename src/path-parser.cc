@@ -26,7 +26,7 @@ bool PathParser::parse(std::string &uri, std::vector<std::string> &path) {
             uri = uri.substr(path_delimiter + 1);
         }
         for (auto &segment: path) {
-            if (SegmentDecoder::decode(segment, CharacterSets::PCHAR_NOT_PCT_ENCODED)) {
+            if (!SegmentDecoder::decode(segment, CharacterSets::PCHAR_NOT_PCT_ENCODED)) {
                 return false;
             }
         }
