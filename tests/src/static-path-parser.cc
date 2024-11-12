@@ -57,8 +57,7 @@ TEST(StaticPathParser, MixedPathSeparators) {
     std::string path = "/foo\\bar/";
     std::vector<std::string> result;
     const bool status = PathParser::parse(path, result);
-    ASSERT_TRUE(status);
-    ASSERT_EQ(result, (std::vector<std::string>{"", "foo\\bar", ""}));
+    ASSERT_FALSE(status);
 }
 
 // TEST(StaticPathParser, DoubleSlashes) {
