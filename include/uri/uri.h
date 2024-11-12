@@ -24,6 +24,8 @@ public:
 
 	[[nodiscard]] bool parse(const std::string &str) const;
 
+	[[nodiscard]] bool hasScheme() const;
+
 	[[nodiscard]] bool hasAuthority() const;
 
 	[[nodiscard]] bool hasPort() const;
@@ -79,6 +81,8 @@ public:
 	[[nodiscard]] std::string generateString() const;
 
 	[[nodiscard]] bool isRelative() const;
+
+	[[nodiscard]] bool isPathAbsolute() const;
 
 	[[nodiscard]] bool containsRelativePath() const;
 

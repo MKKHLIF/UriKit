@@ -89,6 +89,10 @@ bool Uri::parse(const std::string &str) const {
     return parser.parse(tmp, this);
 }
 
+bool Uri::hasScheme() const {
+    return !pimpl_->scheme_.empty();
+}
+
 std::string Uri::getScheme() const {
     return pimpl_->scheme_;
 }
@@ -220,6 +224,10 @@ std::string Uri::generateString() const {
 }
 
 bool Uri::isRelative() const {
+    return false;
+}
+
+bool Uri::isPathAbsolute() const {
     return false;
 }
 
