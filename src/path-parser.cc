@@ -1,5 +1,8 @@
 #include "path-parser.h"
 
+#include "segment-decoder.h"
+#include "sets.h"
+
 bool PathParser::parse(std::string &uri, std::vector<std::string> &path) {
     path.clear();
 
@@ -22,11 +25,11 @@ bool PathParser::parse(std::string &uri, std::vector<std::string> &path) {
             );
             uri = uri.substr(path_delimiter + 1);
         }
-        // for (auto& segment: path) {
-        //     if (!DecodeElement(segment, PCHAR_NOT_PCT_ENCODED)) {
-        //         return false;
-        //     }
-        // }
+        for (auto &segment: path) {
+            if (SegmentDecoder::decode(segment, CharacterSets::PCHAR_NOT_PCT_ENCODED)) {
+                return false;
+            }
+        }
     }
 
     return true;
