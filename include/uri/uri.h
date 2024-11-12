@@ -24,6 +24,8 @@ public:
 
 	[[nodiscard]] bool parse(const std::string &str) const;
 
+	[[nodiscard]] bool hasScheme() const;
+
 	[[nodiscard]] bool hasAuthority() const;
 
 	[[nodiscard]] bool hasPort() const;

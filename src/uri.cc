@@ -89,6 +89,10 @@ bool Uri::parse(const std::string &str) const {
     return parser.parse(tmp, this);
 }
 
+bool Uri::hasScheme() const {
+    return !pimpl_->scheme_.empty();
+}
+
 std::string Uri::getScheme() const {
     return pimpl_->scheme_;
 }
