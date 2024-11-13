@@ -72,6 +72,10 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
     }
     obj->setPath(path_components);
 
+    // edge case: if host is set but path is empty, set path to "/"
+    if (!obj->getHost().empty() && obj->getPath().empty()) {
+        obj->setPath({""});
+    }
 
     return true;
 }
