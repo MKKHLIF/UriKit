@@ -4,6 +4,7 @@
 #include "authority-parser.h"
 #include "fragment-parser.h"
 #include "path-parser.h"
+#include "query-parser.h"
 #include "scheme-parser.h"
 
 class Parser::Imp {
@@ -86,6 +87,16 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
     }
     if (!fragment.empty()) {
         obj->setFragment(fragment);
+    }
+
+    std::string query;
+    status = QueryParser::parse(uri, query);
+    if (status == false) {
+        obj->reset();
+        return false;
+    }
+    if (!query.empty()) {
+        obj->setQuery(query);
     }
 
     return true;
