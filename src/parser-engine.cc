@@ -2,6 +2,7 @@
 #include "parser-engine.h"
 
 #include "authority-parser.h"
+#include "fragment-parser.h"
 #include "path-parser.h"
 #include "scheme-parser.h"
 
@@ -72,6 +73,20 @@ bool Parser::Imp::parse(std::string &uri, const Uri *obj) {
     }
     obj->setPath(path_components);
 
+    // edge case: if host is set but path is empty, set path to "/"
+    if (!obj->getHost().empty() && obj->getPath().empty()) {
+        obj->setPath({""});
+    }
+
+    std::string fragment;
+    status = FragmentParser::parse(uri, fragment);
+    if (status == false) {
+        obj->reset();
+        return false;
+    }
+    if (!fragment.empty()) {
+        obj->setFragment(fragment);
+    }
 
     return true;
 }
