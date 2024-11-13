@@ -5,6 +5,6 @@ bool FragmentParser::parse(std::string &uri, std::string &fragment) {
         fragment = uri.substr(pos + 1);
         uri = uri.substr(0, pos);
     }
-    
+
     return true;
 }
