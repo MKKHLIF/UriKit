@@ -4,15 +4,6 @@
 #include <vector>
 #include <uri/uri.h>
 
-template<typename T>
-struct ParseResult {
-    bool error;
-    T content;
-
-    ParseResult(const bool s, T c) : error(s), content(std::move(c)) {
-    }
-};
-
 class Parser {
 public:
     Parser();
