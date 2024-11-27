@@ -20,7 +20,7 @@ resolving URIs, ensuring compliance with the standard.
 ## Prerequisites
 
 - CMake 3.8 or later
-- microsoft vcpkg
+- Vcpkg
 - C++17 toolchain compatible with CMake for your development platform
 
 ## Platforms and Compilers
