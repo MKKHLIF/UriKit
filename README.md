@@ -37,7 +37,7 @@ The library is tested on the following platforms and compilers:
 ## Documentation
 
 The full API documentation is available here:
-URL: [API Documentation](https://<your-username>.github.io/<repository-name>/)
+Soon...
 
 ## License
 
