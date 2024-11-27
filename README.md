@@ -35,8 +35,6 @@ The library is tested on the following platforms and compilers:
 | macOS    | Apple Clang | 14.0.0                            |
 
 ## Documentation
-
-The full API documentation is available here:
 Soon...
 
 ## License
